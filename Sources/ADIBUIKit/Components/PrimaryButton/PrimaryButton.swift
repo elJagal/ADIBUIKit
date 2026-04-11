@@ -58,8 +58,7 @@ public struct PrimaryButton: View {
                     LoadingDots()
                 } else {
                     Text(title)
-                        .font(.system(size: 16, weight: .medium))
-                        .tracking(-0.43)
+                        .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Button.Primary.text)
                 }
             }
             .frame(width: size.width, height: 48)
