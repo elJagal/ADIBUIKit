@@ -51,12 +51,12 @@ public struct SecondaryButton: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 54)
+            .frame(height: ADIBSizes.ButtonHeight.secondary)
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: ADIBSizes.Radius.medium)
                     .stroke(borderColor, lineWidth: 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .clipShape(RoundedRectangle(cornerRadius: ADIBSizes.Radius.medium))
         }
         .buttonStyle(ADIBSecondaryButtonStyle())
         .disabled(isLoading)
@@ -78,7 +78,7 @@ private struct ADIBSecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .overlay(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: ADIBSizes.Radius.medium)
                     .stroke(
                         isEnabled && configuration.isPressed
                             ? ADIBColors.Button.Secondary.tapped

@@ -39,20 +39,19 @@ public struct TertiaryButton: View {
 
     public var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
+            HStack(spacing: ADIBSizes.Spacing.small) {
                 if showIcon, let icon {
                     icon
                         .resizable()
                         .frame(width: 24, height: 24)
-                        .foregroundStyle(ADIBColors.interaction)
                 }
 
                 Text(title)
-                    .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.interaction)
+                    .adibTextStyle(ADIBTypography.body.semibold)
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 56)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .frame(height: ADIBSizes.ButtonHeight.tertiary)
+            .clipShape(RoundedRectangle(cornerRadius: ADIBSizes.Radius.medium))
         }
         .buttonStyle(ADIBTertiaryButtonStyle())
     }
@@ -65,14 +64,14 @@ private struct ADIBTertiaryButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .opacity(opacity(isPressed: configuration.isPressed))
+            .foregroundStyle(foregroundColor(isPressed: configuration.isPressed))
             .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 
-    private func opacity(isPressed: Bool) -> Double {
-        if !isEnabled { return 0.2 }
-        if isPressed { return 0.6 }
-        return 1.0
+    private func foregroundColor(isPressed: Bool) -> Color {
+        if !isEnabled { return ADIBColors.Button.Tertiary.disabled }
+        if isPressed { return ADIBColors.Button.Tertiary.tapped }
+        return ADIBColors.Button.Tertiary.default
     }
 }
 

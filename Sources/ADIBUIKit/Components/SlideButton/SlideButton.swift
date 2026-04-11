@@ -22,9 +22,9 @@ public struct SlideButton: View {
 
     @Environment(\.isEnabled) private var isEnabled
 
-    private let thumbSize: CGFloat = 54
-    private let height: CGFloat = 54
-    private let cornerRadius: CGFloat = 16
+    private let thumbSize: CGFloat = ADIBSizes.ButtonHeight.base
+    private let height: CGFloat = ADIBSizes.ButtonHeight.base
+    private let cornerRadius: CGFloat = ADIBSizes.Radius.medium
 
     // MARK: - Init
 

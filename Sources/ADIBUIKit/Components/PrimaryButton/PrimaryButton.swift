@@ -50,9 +50,9 @@ public struct PrimaryButton: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 54)
+            .frame(height: ADIBSizes.ButtonHeight.primary)
             .background(backgroundColor)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .clipShape(RoundedRectangle(cornerRadius: ADIBSizes.Radius.medium))
         }
         .buttonStyle(ADIBPrimaryButtonStyle())
         .disabled(isLoading)
@@ -74,7 +74,7 @@ private struct ADIBPrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: ADIBSizes.Radius.medium)
                     .fill(isEnabled && configuration.isPressed
                           ? ADIBColors.Button.Primary.tapped
                           : Color.clear)

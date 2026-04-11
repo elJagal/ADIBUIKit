@@ -36,7 +36,7 @@ public struct LinkButton: View {
 
     public var body: some View {
         Button(action: action) {
-            HStack(spacing: 8) {
+            HStack(spacing: ADIBSizes.Spacing.small) {
                 if showIcon, let icon {
                     icon
                         .resizable()
