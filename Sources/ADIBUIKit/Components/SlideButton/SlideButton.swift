@@ -87,8 +87,10 @@ public struct SlideButton: View {
                         .offset(x: dragOffset)
                         .gesture(
                             isEnabled
-                            ? DragGesture()
+                            ? DragGesture(minimumDistance: 10, coordinateSpace: .local)
                                 .onChanged { value in
+                                    // Only respond to primarily horizontal drags
+                                    guard abs(value.translation.width) > abs(value.translation.height) else { return }
                                     dragOffset = min(max(0, value.translation.width), maxOffset)
                                 }
                                 .onEnded { _ in
