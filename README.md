@@ -7,7 +7,7 @@ A SwiftUI component library for the ADIB design system.
 Add this package via Swift Package Manager:
 
 ```
-https://github.com/YOUR_USERNAME/ADIBUIKit.git
+https://github.com/elJagal/ADIBUIKit.git
 ```
 
 ## Components
@@ -50,4 +50,4 @@ PrimaryButton("Done") {}
 - **Disabled** — `#C4CFDC` background
 - **Loading** — Animated dots
 
-> **Note:** The button uses the "Bliss Pro Medium" font. Ensure it's bundled in your app.
+> **Font:** Uses the iOS system font (SF Pro) with medium weight.

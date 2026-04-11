@@ -58,9 +58,8 @@ public struct PrimaryButton: View {
                     LoadingDots()
                 } else {
                     Text(title)
-                        .font(.custom("BlissPro-Medium", size: 16))
+                        .font(.system(size: 16, weight: .medium))
                         .tracking(-0.43)
-                        .lineSpacing(6)
                 }
             }
             .frame(width: size.width, height: 48)
