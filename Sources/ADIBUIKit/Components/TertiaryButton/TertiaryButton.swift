@@ -47,7 +47,7 @@ public struct TertiaryButton: View {
                 }
 
                 Text(title)
-                    .adibTextStyle(ADIBTypography.body.semibold)
+                    .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Button.Tertiary.default)
             }
             .frame(maxWidth: .infinity)
             .frame(height: ADIBSizes.ButtonHeight.tertiary)
