@@ -108,7 +108,7 @@ public struct ADIBProductListItem: View {
                 Button(action: onMoreTap) {
                     Image(systemName: "ellipsis")
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(ADIBColors.Text.base)
+                        .foregroundStyle(ADIBColors.interaction)
                         .frame(width: moreIconSize, height: moreIconSize)
                         .padding(moreButtonPadding)
                         .contentShape(Rectangle())
