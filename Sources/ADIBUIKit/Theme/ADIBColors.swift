@@ -3,6 +3,9 @@ import SwiftUI
 /// ADIB Design System Color Tokens
 ///
 /// Auto-generated from Figma Style Guide.
+/// Supports both Light Mode and Dark Mode.
+/// Light mode tokens from Figma node 1-4665, Dark mode tokens from node 1-1889.
+///
 /// Organized following the Figma token structure:
 /// `color.<category>.<subcategory>.<variant>`
 public enum ADIBColors {
@@ -12,38 +15,38 @@ public enum ADIBColors {
     public enum Semantic {
 
         public enum Error {
-            /// #7D0017 — Color used for errors
+            /// Light: #7D0017 | Dark: #7D0017
             public static let one = Color(hex: "#7D0017")
-            /// #DA0027 — Color used for errors
+            /// Light: #DA0027 | Dark: #DA0027
             public static let two = Color(hex: "#DA0027")
-            /// #FFEBEE — Color used for errors (light)
+            /// Light: #FFEBEE | Dark: #FFEBEE
             public static let three = Color(hex: "#FFEBEE")
         }
 
         public enum Success {
-            /// #005937 — Color used for success
+            /// Light: #005937 | Dark: #005937
             public static let one = Color(hex: "#005937")
-            /// #008552 — Color used for success
-            public static let two = Color(hex: "#008552")
-            /// #E8FFF6 — Color used for success (light)
+            /// Light: #008250 | Dark: #008552
+            public static let two = Color.adaptive(lightHex: "#008250", darkHex: "#008552")
+            /// Light: #E8FFF6 | Dark: #E8FFF6
             public static let three = Color(hex: "#E8FFF6")
         }
 
         public enum Warning {
-            /// #9E6300 — Color used for warning or pending states
+            /// Light: #9E6300 | Dark: #9E6300
             public static let one = Color(hex: "#9E6300")
-            /// #FF9F00 — Color used for warning or pending states
+            /// Light: #FF9F00 | Dark: #FF9F00
             public static let two = Color(hex: "#FF9F00")
-            /// #FFF5E3 — Color used for warning or pending states (light)
+            /// Light: #FFF5E3 | Dark: #FFF5E3
             public static let three = Color(hex: "#FFF5E3")
         }
 
         public enum Info {
-            /// #004469 — Color used for informative use
+            /// Light: #004469 | Dark: #004469
             public static let one = Color(hex: "#004469")
-            /// #0075B2 — Color used for informative use
+            /// Light: #0075B2 | Dark: #0075B2
             public static let two = Color(hex: "#0075B2")
-            /// #EBF8FF — Color used for informative use (light)
+            /// Light: #EBF8FF | Dark: #EBF8FF
             public static let three = Color(hex: "#EBF8FF")
         }
     }
@@ -51,21 +54,21 @@ public enum ADIBColors {
     // MARK: - Primitive
 
     public enum Primitive {
-        /// #FFFFFF — White color
+        /// #FFFFFF
         public static let white = Color(hex: "#FFFFFF")
-        /// #000000 — Black color
+        /// #000000
         public static let black = Color(hex: "#000000")
 
         public enum Grey {
-            /// #333333 — Grey color palette
+            /// #333333
             public static let one = Color(hex: "#333333")
-            /// #757575 — Grey color palette
+            /// #757575
             public static let two = Color(hex: "#757575")
-            /// #CCCCCC — Grey color palette
+            /// #CCCCCC
             public static let three = Color(hex: "#CCCCCC")
-            /// #F2F2F2 — Grey color palette
+            /// #F2F2F2
             public static let four = Color(hex: "#F2F2F2")
-            /// #FAFAFA — Grey color palette
+            /// #FAFAFA
             public static let five = Color(hex: "#FAFAFA")
         }
     }
@@ -82,7 +85,7 @@ public enum ADIBColors {
         public static let base = Color(hex: "#002B52")
         /// #69778C — Secondary color used for captions or sub headings
         public static let subdued = Color(hex: "#69778C")
-        /// #FFFFFF — Color used when text is white on light mode
+        /// #FFFFFF — Color used when text is white
         public static let white = Color(hex: "#FFFFFF")
     }
 
@@ -96,20 +99,20 @@ public enum ADIBColors {
     public enum Brand {
 
         public enum Primary {
-            /// #003978 — Primary brand color for ADIB
+            /// #003978
             public static let one = Color(hex: "#003978")
-            /// #0075B0 — Primary brand color for ADIB
+            /// #0075B0
             public static let two = Color(hex: "#0075B0")
-            /// #EEF7FB — Primary brand color for ADIB (light)
+            /// #EEF7FB
             public static let three = Color(hex: "#EEF7FB")
         }
 
         public enum Secondary {
-            /// #C6C6C5 — Secondary brand color for ADIB
+            /// #C6C6C5
             public static let one = Color(hex: "#C6C6C5")
-            /// #8C704B — Secondary brand color for ADIB
+            /// #8C704B
             public static let two = Color(hex: "#8C704B")
-            /// #00C1DE — Secondary brand color for ADIB
+            /// #00C1DE
             public static let three = Color(hex: "#00C1DE")
         }
     }
@@ -119,7 +122,7 @@ public enum ADIBColors {
     public enum Button {
 
         public enum Primary {
-            /// #003978 — Background color for primary buttons (→ brand.primary.one)
+            /// #003978 — Background color for primary buttons
             public static let background = Color(hex: "#003978")
             /// #FFFFFF — Text color for primary buttons
             public static let text = Color(hex: "#FFFFFF")
@@ -130,9 +133,9 @@ public enum ADIBColors {
         }
 
         public enum Secondary {
-            /// #006DD1 — Border color for secondary buttons (→ interaction)
+            /// #006DD1 — Border color for secondary buttons
             public static let border = Color(hex: "#006DD1")
-            /// #006DD1 — Text color for secondary buttons (→ interaction)
+            /// #006DD1 — Text color for secondary buttons
             public static let text = Color(hex: "#006DD1")
             /// #62A8E8 — Tapped state
             public static let tapped = Color(hex: "#62A8E8")
@@ -150,13 +153,13 @@ public enum ADIBColors {
 
     // MARK: - Border
 
-    /// #CCCCCC — Color used for all borders (→ primitive.grey.three)
+    /// #CCCCCC — Color used for all borders
     public static let border = Color(hex: "#CCCCCC")
 
     // MARK: - Input Fields
 
     public enum Inputs {
-        /// #F2F5F7 — Background color for input fields (→ surface.components)
+        /// #F2F5F7 — Background color for input fields
         public static let background = Color(hex: "#F2F5F7")
         /// #637185 — Placeholder text color
         public static let placeholder = Color(hex: "#637185")
@@ -268,28 +271,28 @@ public enum ADIBColors {
     public enum Banners {
 
         public enum Info {
-            /// #EBF8FF — Info banner background (→ semantic.info.three)
+            /// #EBF8FF — Info banner background
             public static let background = Color(hex: "#EBF8FF")
             /// #E2F1F9 — Info banner button
             public static let buttons = Color(hex: "#E2F1F9")
         }
 
         public enum Success {
-            /// #E8FFF6 — Success banner background (→ semantic.success.three)
+            /// #E8FFF6 — Success banner background
             public static let background = Color(hex: "#E8FFF6")
             /// #DFF8F0 — Success banner button
             public static let buttons = Color(hex: "#DFF8F0")
         }
 
         public enum Error {
-            /// #FFEBEE — Error banner background (→ semantic.error.three)
+            /// #FFEBEE — Error banner background
             public static let background = Color(hex: "#FFEBEE")
             /// #FAE2E5 — Error banner button
             public static let buttons = Color(hex: "#FAE2E5")
         }
 
         public enum Warning {
-            /// #FFF5E3 — Warning banner background (→ semantic.warning.three)
+            /// #FFF5E3 — Warning banner background
             public static let background = Color(hex: "#FFF5E3")
             /// #FBEFDA — Warning banner button
             public static let buttons = Color(hex: "#FBEFDA")
