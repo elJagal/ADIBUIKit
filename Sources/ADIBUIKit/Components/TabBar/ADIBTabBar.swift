@@ -47,10 +47,14 @@ public struct ADIBTabItem: Identifiable, Hashable {
 /// ```swift
 /// @State var selected = "home"
 ///
+/// // Use default ADIB tabs (Home, Pay, Transfer, Invest, Exceed):
+/// ADIBTabBar(selection: $selected)
+///
+/// // Or provide custom tabs:
 /// ADIBTabBar(
 ///     items: [
-///         ADIBTabItem(id: "home", title: "Home", icon: Image(systemName: "square.grid.2x2")),
-///         ADIBTabItem(id: "pay", title: "Pay", icon: Image(systemName: "banknote")),
+///         ADIBTabItem(id: "home", title: "Home", icon: Image("layout-dashboard")),
+///         ADIBTabItem(id: "pay", title: "Pay", icon: Image("cash")),
 ///     ],
 ///     selection: $selected
 /// )
@@ -69,14 +73,51 @@ public struct ADIBTabBar: View {
     private let verticalPadding: CGFloat = ADIBSizes.Spacing.medium // 16
     private let iconLabelSpacing: CGFloat = ADIBSizes.Spacing.xsmall // 4
 
+    // MARK: - Default Items
+
+    /// The default ADIB tab bar items (Home, Pay, Transfer, Invest, Exceed).
+    /// Requires the corresponding icon assets in your app's asset catalog.
+    public static let defaultItems: [ADIBTabItem] = [
+        ADIBTabItem(
+            id: "home",
+            title: "Home",
+            icon: Image("layout-dashboard"),
+            activeIcon: Image("layout-dashboard-filled")
+        ),
+        ADIBTabItem(
+            id: "pay",
+            title: "Pay",
+            icon: Image("cash"),
+            activeIcon: Image("cash-filled")
+        ),
+        ADIBTabItem(
+            id: "transfer",
+            title: "Transfer",
+            icon: Image("arrow-left-right"),
+            activeIcon: Image("arrow-left-right")
+        ),
+        ADIBTabItem(
+            id: "invest",
+            title: "Invest",
+            icon: Image("invest-chart"),
+            activeIcon: Image("invest-chart-filled")
+        ),
+        ADIBTabItem(
+            id: "exceed",
+            title: "Exceed",
+            icon: Image("Exceed"),
+            activeIcon: Image("Exceed")
+        ),
+    ]
+
     // MARK: - Init
 
     /// Creates an ADIB tab bar.
     /// - Parameters:
-    ///   - items: The tab items to display.
+    ///   - items: The tab items to display. Defaults to the standard ADIB tabs.
     ///   - selection: A binding to the currently selected tab's id.
     public init(
-        items: [ADIBTabItem],
+        items: [ADIBTabItem] = ADIBTabBar.defaultItems,
         selection: Binding<String>
     ) {
         self.items = items
@@ -151,41 +192,7 @@ public struct ADIBTabBar: View {
 
                 Spacer()
 
-                ADIBTabBar(
-                    items: [
-                        ADIBTabItem(
-                            id: "home",
-                            title: "Home",
-                            icon: Image(systemName: "square.grid.2x2"),
-                            activeIcon: Image(systemName: "square.grid.2x2.fill")
-                        ),
-                        ADIBTabItem(
-                            id: "pay",
-                            title: "Pay",
-                            icon: Image(systemName: "banknote"),
-                            activeIcon: Image(systemName: "banknote.fill")
-                        ),
-                        ADIBTabItem(
-                            id: "transfer",
-                            title: "Transfer",
-                            icon: Image(systemName: "arrow.left.arrow.right"),
-                            activeIcon: Image(systemName: "arrow.left.arrow.right")
-                        ),
-                        ADIBTabItem(
-                            id: "invest",
-                            title: "Invest",
-                            icon: Image(systemName: "chart.bar"),
-                            activeIcon: Image(systemName: "chart.bar.fill")
-                        ),
-                        ADIBTabItem(
-                            id: "exceed",
-                            title: "Exceed",
-                            icon: Image(systemName: "creditcard"),
-                            activeIcon: Image(systemName: "creditcard.fill")
-                        ),
-                    ],
-                    selection: $selected
-                )
+                ADIBTabBar(selection: $selected)
             }
             .background(ADIBColors.background)
             .ignoresSafeArea(edges: .bottom)
