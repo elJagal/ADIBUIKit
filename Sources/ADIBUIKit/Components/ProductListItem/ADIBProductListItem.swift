@@ -141,7 +141,7 @@ public struct ADIBProductListItem: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: iconSize, height: iconSize)
-                .foregroundStyle(ADIBColors.interaction)
+                .foregroundStyle(ADIBColors.Segment.accent)
                 .padding(iconBoxPadding)
                 .background(
                     RoundedRectangle(cornerRadius: iconBoxRadius)
