@@ -32,6 +32,8 @@ public enum ADIBSizes {
         public static let three: CGFloat = 16
         public static let two: CGFloat = 14
         public static let one: CGFloat = 12
+        /// 10pt — Used for tab bar labels
+        public static let tabLabel: CGFloat = 10
 
         // Mobile aliases
         public static let mobileH1: CGFloat = seven      // 32
