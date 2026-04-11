@@ -48,10 +48,14 @@ public struct ADIBTabsItem: Identifiable, Hashable {
 /// ```swift
 /// @State var selected = "accounts"
 ///
+/// // Use default ADIB tabs (Accounts, Cards, Wealth, Finance, Takaful):
+/// ADIBTabs(selection: $selected)
+///
+/// // Or provide custom tabs:
 /// ADIBTabs(
 ///     items: [
-///         ADIBTabsItem(id: "accounts", title: "Accounts", icon: Image(systemName: "building.columns")),
-///         ADIBTabsItem(id: "cards", title: "Cards", icon: Image(systemName: "creditcard")),
+///         ADIBTabsItem(id: "accounts", title: "Accounts", icon: Image("bank-filled")),
+///         ADIBTabsItem(id: "cards", title: "Cards", icon: Image("credit-card-filled")),
 ///     ],
 ///     selection: $selected
 /// )
@@ -71,14 +75,51 @@ public struct ADIBTabs: View {
     private let bottomPadding: CGFloat = ADIBSizes.Spacing.medium     // 16
     private let indicatorHeight: CGFloat = 2
 
+    // MARK: - Default Items
+
+    /// The default ADIB tab strip items (Accounts, Cards, Wealth, Finance, Takaful).
+    /// Requires the corresponding icon assets in your app's asset catalog.
+    public static let defaultItems: [ADIBTabsItem] = [
+        ADIBTabsItem(
+            id: "accounts",
+            title: "Accounts",
+            icon: Image("bank-filled"),
+            activeIcon: Image("bank-filled")
+        ),
+        ADIBTabsItem(
+            id: "cards",
+            title: "Cards",
+            icon: Image("credit-card-filled"),
+            activeIcon: Image("credit-card-filled")
+        ),
+        ADIBTabsItem(
+            id: "wealth",
+            title: "Wealth",
+            icon: Image("wealth-filled"),
+            activeIcon: Image("wealth-filled")
+        ),
+        ADIBTabsItem(
+            id: "finance",
+            title: "Finance",
+            icon: Image("cash-filled"),
+            activeIcon: Image("cash-filled")
+        ),
+        ADIBTabsItem(
+            id: "takaful",
+            title: "Takaful",
+            icon: Image("shield-check-filled"),
+            activeIcon: Image("shield-check-filled")
+        ),
+    ]
+
     // MARK: - Init
 
     /// Creates an ADIB tab strip.
     /// - Parameters:
-    ///   - items: The tab items to display.
+    ///   - items: The tab items to display. Defaults to the standard ADIB tabs.
     ///   - selection: A binding to the currently selected tab's id.
     public init(
-        items: [ADIBTabsItem],
+        items: [ADIBTabsItem] = ADIBTabs.defaultItems,
         selection: Binding<String>
     ) {
         self.items = items
@@ -156,41 +197,7 @@ public struct ADIBTabs: View {
 
         var body: some View {
             VStack(spacing: 0) {
-                ADIBTabs(
-                    items: [
-                        ADIBTabsItem(
-                            id: "accounts",
-                            title: "Accounts",
-                            icon: Image(systemName: "building.columns"),
-                            activeIcon: Image(systemName: "building.columns.fill")
-                        ),
-                        ADIBTabsItem(
-                            id: "cards",
-                            title: "Cards",
-                            icon: Image(systemName: "creditcard"),
-                            activeIcon: Image(systemName: "creditcard.fill")
-                        ),
-                        ADIBTabsItem(
-                            id: "wealth",
-                            title: "Wealth",
-                            icon: Image(systemName: "chart.line.uptrend.xyaxis"),
-                            activeIcon: Image(systemName: "chart.line.uptrend.xyaxis")
-                        ),
-                        ADIBTabsItem(
-                            id: "finance",
-                            title: "Finance",
-                            icon: Image(systemName: "banknote"),
-                            activeIcon: Image(systemName: "banknote.fill")
-                        ),
-                        ADIBTabsItem(
-                            id: "takaful",
-                            title: "Takaful",
-                            icon: Image(systemName: "checkmark.shield"),
-                            activeIcon: Image(systemName: "checkmark.shield.fill")
-                        ),
-                    ],
-                    selection: $selected
-                )
+                ADIBTabs(selection: $selected)
 
                 Spacer()
 
