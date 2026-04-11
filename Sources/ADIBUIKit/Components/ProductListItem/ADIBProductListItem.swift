@@ -4,7 +4,8 @@ import SwiftUI
 public enum ADIBProductIconStyle {
     /// An icon rendered on a colored background (e.g. accounts, savings, BNPL).
     /// Uses `ADIBColors.Segment.surface` as background.
-    case iconOnBackground(Image)
+    /// Optionally pass a custom icon color and background color.
+    case iconOnBackground(Image, iconColor: Color? = nil, backgroundColor: Color? = nil)
 
     /// A full image thumbnail (e.g. card images like Emirates, Smiles, Visa).
     case image(Image)
@@ -135,17 +136,17 @@ public struct ADIBProductListItem: View {
     @ViewBuilder
     private var leadingIcon: some View {
         switch iconStyle {
-        case .iconOnBackground(let icon):
+        case .iconOnBackground(let icon, let iconColor, let backgroundColor):
             icon
                 .renderingMode(.template)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: iconSize, height: iconSize)
-                .foregroundStyle(ADIBColors.Segment.accent)
+                .foregroundStyle(iconColor ?? ADIBColors.Segment.accent)
                 .padding(iconBoxPadding)
                 .background(
                     RoundedRectangle(cornerRadius: iconBoxRadius)
-                        .fill(ADIBColors.Segment.surface)
+                        .fill(backgroundColor ?? ADIBColors.Segment.surface)
                 )
 
         case .image(let image):
