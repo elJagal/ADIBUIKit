@@ -2,9 +2,8 @@ import SwiftUI
 
 /// ADIB Design System Color Tokens
 ///
-/// Auto-generated from Figma Style Guide.
-/// Supports both Light Mode and Dark Mode.
-/// Light mode tokens from Figma node 1-4665, Dark mode tokens from node 1-1889.
+/// Backed by `DesignTokens.xcassets` asset catalog which provides
+/// automatic Light/Dark mode support via Xcode appearance variants.
 ///
 /// Organized following the Figma token structure:
 /// `color.<category>.<subcategory>.<variant>`
@@ -15,105 +14,78 @@ public enum ADIBColors {
     public enum Semantic {
 
         public enum Error {
-            /// Light: #7D0017 | Dark: #7D0017
-            public static let one = Color(hex: "#7D0017")
-            /// Light: #DA0027 | Dark: #DA0027
-            public static let two = Color(hex: "#DA0027")
-            /// Light: #FFEBEE | Dark: #FFEBEE
-            public static let three = Color(hex: "#FFEBEE")
+            public static let one = Color("colorSemanticErrorOne", bundle: .module)
+            public static let two = Color("colorSemanticErrorTwo", bundle: .module)
+            public static let three = Color("colorSemanticErrorThree", bundle: .module)
         }
 
         public enum Success {
-            /// Light: #005937 | Dark: #005937
-            public static let one = Color(hex: "#005937")
-            /// Light: #008250 | Dark: #008552
-            public static let two = Color.adaptive(lightHex: "#008250", darkHex: "#008552")
-            /// Light: #E8FFF6 | Dark: #E8FFF6
-            public static let three = Color(hex: "#E8FFF6")
+            public static let one = Color("colorSemanticSuccessOne", bundle: .module)
+            public static let two = Color("colorSemanticSuccessTwo", bundle: .module)
+            public static let three = Color("colorSemanticSuccessThree", bundle: .module)
         }
 
         public enum Warning {
-            /// Light: #9E6300 | Dark: #9E6300
-            public static let one = Color(hex: "#9E6300")
-            /// Light: #FF9F00 | Dark: #FF9F00
-            public static let two = Color(hex: "#FF9F00")
-            /// Light: #FFF5E3 | Dark: #FFF5E3
-            public static let three = Color(hex: "#FFF5E3")
+            public static let one = Color("colorSemanticWarningOne", bundle: .module)
+            public static let two = Color("colorSemanticWarningTwo", bundle: .module)
+            public static let three = Color("colorSemanticWarningThree", bundle: .module)
         }
 
         public enum Info {
-            /// Light: #004469 | Dark: #004469
-            public static let one = Color(hex: "#004469")
-            /// Light: #0075B2 | Dark: #0075B2
-            public static let two = Color(hex: "#0075B2")
-            /// Light: #EBF8FF | Dark: #EBF8FF
-            public static let three = Color(hex: "#EBF8FF")
+            public static let one = Color("colorSemanticInfoOne", bundle: .module)
+            public static let two = Color("colorSemanticInfoTwo", bundle: .module)
+            public static let three = Color("colorSemanticInfoThree", bundle: .module)
         }
+
+        /// Fraud indicator color
+        public static let fraud = Color("colorSemanticFraud", bundle: .module)
     }
 
     // MARK: - Primitive
 
     public enum Primitive {
-        /// #FFFFFF
-        public static let white = Color(hex: "#FFFFFF")
-        /// #000000
-        public static let black = Color(hex: "#000000")
+        public static let white = Color("colorPrimitiveWhite", bundle: .module)
+        public static let black = Color("colorPrimitiveBlack", bundle: .module)
 
         public enum Grey {
-            /// #333333
-            public static let one = Color(hex: "#333333")
-            /// #757575
-            public static let two = Color(hex: "#757575")
-            /// #CCCCCC
-            public static let three = Color(hex: "#CCCCCC")
-            /// #F2F2F2
-            public static let four = Color(hex: "#F2F2F2")
-            /// #FAFAFA
-            public static let five = Color(hex: "#FAFAFA")
+            public static let one = Color("colorPrimitiveGreyOne", bundle: .module)
+            public static let two = Color("colorPrimitiveGreyTwo", bundle: .module)
+            public static let three = Color("colorPrimitiveGreyThree", bundle: .module)
+            public static let four = Color("colorPrimitiveGreyFour", bundle: .module)
+            public static let five = Color("colorPrimitiveGreyFive", bundle: .module)
         }
     }
 
     // MARK: - Interaction
 
-    /// #006DD1 — Color used to show that an item is actionable
-    public static let interaction = Color(hex: "#006DD1")
+    public static let interaction = Color("colorInteraction", bundle: .module)
 
     // MARK: - Text
 
     public enum Text {
-        /// #002B52 — Primary color used for all text
-        public static let base = Color(hex: "#002B52")
-        /// #69778C — Secondary color used for captions or sub headings
-        public static let subdued = Color(hex: "#69778C")
-        /// #FFFFFF — Color used when text is white
-        public static let white = Color(hex: "#FFFFFF")
+        public static let base = Color("colorTextBase", bundle: .module)
+        public static let subdued = Color("colorTextSubdued", bundle: .module)
+        public static let white = Color("colorTextWhite", bundle: .module)
     }
 
     // MARK: - Background
 
-    /// #FFFFFF — The main background color of the app
-    public static let background = Color(hex: "#FFFFFF")
+    public static let background = Color("colorBackground", bundle: .module)
 
     // MARK: - Brand
 
     public enum Brand {
 
         public enum Primary {
-            /// #003978
-            public static let one = Color(hex: "#003978")
-            /// #0075B0
-            public static let two = Color(hex: "#0075B0")
-            /// #EEF7FB
-            public static let three = Color(hex: "#EEF7FB")
+            public static let one = Color("colorBrandPrimaryOne", bundle: .module)
+            public static let two = Color("colorBrandPrimaryTwo", bundle: .module)
+            public static let three = Color("colorBrandPrimaryThree", bundle: .module)
         }
 
         public enum Secondary {
-            /// #C6C6C5
-            public static let one = Color(hex: "#C6C6C5")
-            /// #8C704B
-            public static let two = Color(hex: "#8C704B")
-            /// #00C1DE
-            public static let three = Color(hex: "#00C1DE")
+            public static let one = Color("colorBrandSecondaryOne", bundle: .module)
+            public static let two = Color("colorBrandSecondaryTwo", bundle: .module)
+            public static let three = Color("colorBrandSecondaryThree", bundle: .module)
         }
     }
 
@@ -122,148 +94,129 @@ public enum ADIBColors {
     public enum Button {
 
         public enum Primary {
-            /// #003978 — Background color for primary buttons
-            public static let background = Color(hex: "#003978")
-            /// #FFFFFF — Text color for primary buttons
-            public static let text = Color(hex: "#FFFFFF")
-            /// #6284AA — Tapped state
-            public static let tapped = Color(hex: "#6284AA")
-            /// #C4CFDC — Disabled state
-            public static let disabled = Color(hex: "#C4CFDC")
+            public static let background = Color("colorButtonPrimaryBackground", bundle: .module)
+            public static let text = Color("colorButtonPrimaryText", bundle: .module)
+            public static let tapped = Color("colorButtonPrimaryTapped", bundle: .module)
+            public static let disabled = Color("colorButtonPrimaryDisabled", bundle: .module)
         }
 
         public enum Secondary {
-            /// #006DD1 — Border color for secondary buttons
-            public static let border = Color(hex: "#006DD1")
-            /// #006DD1 — Text color for secondary buttons
-            public static let text = Color(hex: "#006DD1")
-            /// #62A8E8 — Tapped state
-            public static let tapped = Color(hex: "#62A8E8")
-            /// #C4DBF1 — Disabled state
-            public static let disabled = Color(hex: "#C4DBF1")
+            public static let border = Color("colorButtonSecondaryBorder", bundle: .module)
+            public static let text = Color("colorButtonSecondaryText", bundle: .module)
+            public static let tapped = Color("colorButtonSecondaryTapped", bundle: .module)
+            public static let disabled = Color("colorButtonSecondaryDisabled", bundle: .module)
         }
 
         public enum Small {
-            /// #EBF4FD — Background for small buttons
-            public static let background = Color(hex: "#EBF4FD")
-            /// #006DD1 — Text color for small buttons
-            public static let text = Color(hex: "#006DD1")
+            public static let background = Color("colorButtonSmallBackground", bundle: .module)
+            public static let text = Color("colorButtonSmallText", bundle: .module)
+        }
+
+        public enum Tertiary {
+            public static let `default` = Color("colorButtonTertiaryDefault", bundle: .module)
+            public static let tapped = Color("colorButtonTertiaryTapped", bundle: .module)
+            public static let disabled = Color("colorButtonTertiaryDisabled", bundle: .module)
         }
     }
 
     // MARK: - Border
 
-    /// #CCCCCC — Color used for all borders
-    public static let border = Color(hex: "#CCCCCC")
+    public static let border = Color("colorBorder", bundle: .module)
 
     // MARK: - Input Fields
 
     public enum Inputs {
-        /// #F2F5F7 — Background color for input fields
-        public static let background = Color(hex: "#F2F5F7")
-        /// #637185 — Placeholder text color
-        public static let placeholder = Color(hex: "#637185")
+        public static let background = Color("colorInputsBackground", bundle: .module)
+        public static let placeholder = Color("colorInputsPlaceholder", bundle: .module)
     }
 
     // MARK: - Surface
 
     public enum Surface {
-        /// #FFFFFF — Raised surface
-        public static let raised = Color(hex: "#FFFFFF")
-        /// #F2F5F7 — Background for input or control components
-        public static let components = Color(hex: "#F2F5F7")
-        /// #E0EBF0 — Used as accent background colors
-        public static let blueOne = Color(hex: "#E0EBF0")
-        /// #EEF7FB — Used as accent background colors
-        public static let blueTwo = Color(hex: "#EEF7FB")
-        /// #FFF5E3 — Used as accent background colors
-        public static let yellow = Color(hex: "#FFF5E3")
-        /// #EFF8F7 — Used as accent background colors
-        public static let green = Color(hex: "#EFF8F7")
-        /// #F6EFF8 — Used as accent background colors
-        public static let purple = Color(hex: "#F6EFF8")
-        /// #F7F3E9 — Used as accent background colors
-        public static let gold = Color(hex: "#F7F3E9")
+        public static let raised = Color("colorSurfaceRaised", bundle: .module)
+        public static let components = Color("colorSurfaceComponents", bundle: .module)
+        public static let blueOne = Color("colorSurfaceBlueOne", bundle: .module)
+        public static let blueTwo = Color("colorSurfaceBlueTwo", bundle: .module)
+        public static let yellow = Color("colorSurfaceYellow", bundle: .module)
+        public static let green = Color("colorSurfaceGreen", bundle: .module)
+        public static let purple = Color("colorSurfacePurple", bundle: .module)
+        public static let goldOne = Color("colorSurfaceGoldOne", bundle: .module)
+        public static let goldTwo = Color("colorSurfaceGoldTwo", bundle: .module)
+        public static let diamondOne = Color("colorSurfaceDiamondOne", bundle: .module)
+        public static let diamondTwo = Color("colorSurfaceDiamondTwo", bundle: .module)
+        public static let privateOne = Color("colorSurfacePrivateOne", bundle: .module)
+        public static let privateTwo = Color("colorSurfacePrivateTwo", bundle: .module)
     }
 
     // MARK: - Gradients
 
     public enum Gradients {
-        /// Linear gradient from #DCEFF5 to #32C4EE (45°)
-        public static let one = LinearGradient(
-            colors: [Color(hex: "#DCEFF5"), Color(hex: "#32C4EE")],
-            startPoint: .bottomLeading, endPoint: .topTrailing
-        )
-        /// Linear gradient from #61C6EE to #009EDC (45°)
-        public static let two = LinearGradient(
-            colors: [Color(hex: "#61C6EE"), Color(hex: "#009EDC")],
-            startPoint: .bottomLeading, endPoint: .topTrailing
-        )
-        /// Linear gradient from #1B1F52 to #3386C7 (45°)
-        public static let three = LinearGradient(
-            colors: [Color(hex: "#1B1F52"), Color(hex: "#3386C7")],
-            startPoint: .bottomLeading, endPoint: .topTrailing
-        )
+        public static let one = Color("colorGradientsOne", bundle: .module)
+        public static let two = Color("colorGradientsTwo", bundle: .module)
+        public static let three = Color("colorGradientsThree", bundle: .module)
+
+        public enum Palette {
+            public static let blueOne = Color("colorGradientsPaletteBlueOne", bundle: .module)
+            public static let blueTwo = Color("colorGradientsPaletteBlueTwo", bundle: .module)
+        }
+
+        public enum Colors {
+            public static let oneStart = Color("colorGradientsColorsOneStart", bundle: .module)
+            public static let oneEnd = Color("colorGradientsColorsOneEnd", bundle: .module)
+            public static let twoStart = Color("colorGradientsColorsTwoStart", bundle: .module)
+            public static let twoEnd = Color("colorGradientsColorsTwoEnd", bundle: .module)
+        }
+
+        /// Convenience LinearGradient builders
+        public static var gradientOne: LinearGradient {
+            LinearGradient(
+                colors: [Colors.oneStart, Colors.oneEnd],
+                startPoint: .bottomLeading, endPoint: .topTrailing
+            )
+        }
+
+        public static var gradientTwo: LinearGradient {
+            LinearGradient(
+                colors: [Colors.twoStart, Colors.twoEnd],
+                startPoint: .bottomLeading, endPoint: .topTrailing
+            )
+        }
     }
 
     // MARK: - Charts / Graphs
 
     public enum Charts {
-        /// #6B90F7
-        public static let blue = Color(hex: "#6B90F7")
-        /// #7363E8
-        public static let purple = Color(hex: "#7363E8")
-        /// #CA3B7D
-        public static let pink = Color(hex: "#CA3B7D")
-        /// #ED6A2C
-        public static let orange = Color(hex: "#ED6A2C")
-        /// #F4B23E
-        public static let yellow = Color(hex: "#F4B23E")
+        public static let blue = Color("colorChartsBlue", bundle: .module)
+        public static let purple = Color("colorChartsPurple", bundle: .module)
+        public static let pink = Color("colorChartsPink", bundle: .module)
+        public static let orange = Color("colorChartsOrange", bundle: .module)
+        public static let yellow = Color("colorChartsYellow", bundle: .module)
     }
 
     // MARK: - Segment
 
     public enum Segment {
-        /// #EEF7FB — Segment surface
-        public static let surface = Color(hex: "#EEF7FB")
-        /// #0EA4DF — Segment accent
-        public static let accent = Color(hex: "#0EA4DF")
+        public static let surface = Color("colorSegmentSurface", bundle: .module)
+        public static let accent = Color("colorSegmentAccent", bundle: .module)
 
         public enum Gold {
-            /// #5C4C25
-            public static let one = Color(hex: "#5C4C25")
-            /// #94703D
-            public static let two = Color(hex: "#94703D")
-            /// #F7F3E9
-            public static let three = Color(hex: "#F7F3E9")
+            public static let one = Color("colorSegmentGoldOne", bundle: .module)
+            public static let two = Color("colorSegmentGoldTwo", bundle: .module)
+            public static let three = Color("colorSegmentGoldThree", bundle: .module)
         }
 
         public enum Diamond {
-            /// #333333
-            public static let one = Color(hex: "#333333")
-            /// #575757
-            public static let two = Color(hex: "#575757")
-            /// #F2F5F7
-            public static let three = Color(hex: "#F2F5F7")
+            public static let one = Color("colorSegmentDiamondOne", bundle: .module)
+            public static let two = Color("colorSegmentDiamondTwo", bundle: .module)
+            public static let three = Color("colorSegmentDiamondThree", bundle: .module)
         }
 
         public enum Mass {
-            /// #0EA4DF
-            public static let one = Color(hex: "#0EA4DF")
-            /// #EEF7FB
-            public static let two = Color(hex: "#EEF7FB")
+            public static let one = Color("colorSegmentMassOne", bundle: .module)
+            public static let two = Color("colorSegmentMassTwo", bundle: .module)
         }
-    }
 
-    // MARK: - Blue Background
-
-    public enum BlueBackground {
-        /// #5985CB — Input background on blue
-        public static let inputBackground = Color(hex: "#5985CB")
-        /// #1F5FB5 — Disabled button on blue
-        public static let buttonDisabled = Color(hex: "#1F5FB5")
-        /// #9BB9EA — Disabled button text on blue
-        public static let buttonDisabledText = Color(hex: "#9BB9EA")
+        public static let privateGoldText = Color("colorSegmentPrivateGoldtext", bundle: .module)
     }
 
     // MARK: - Banners
@@ -271,31 +224,46 @@ public enum ADIBColors {
     public enum Banners {
 
         public enum Info {
-            /// #EBF8FF — Info banner background
-            public static let background = Color(hex: "#EBF8FF")
-            /// #E2F1F9 — Info banner button
-            public static let buttons = Color(hex: "#E2F1F9")
+            public static let background = Color("colorBannersInfoBg", bundle: .module)
+            public static let buttons = Color("colorBannersInfoButtons", bundle: .module)
         }
 
         public enum Success {
-            /// #E8FFF6 — Success banner background
-            public static let background = Color(hex: "#E8FFF6")
-            /// #DFF8F0 — Success banner button
-            public static let buttons = Color(hex: "#DFF8F0")
+            public static let background = Color("colorBannersSuccessBg", bundle: .module)
+            public static let buttons = Color("colorBannersSuccessButtons", bundle: .module)
         }
 
         public enum Error {
-            /// #FFEBEE — Error banner background
-            public static let background = Color(hex: "#FFEBEE")
-            /// #FAE2E5 — Error banner button
-            public static let buttons = Color(hex: "#FAE2E5")
+            public static let background = Color("colorBannersErrorBg", bundle: .module)
+            public static let buttons = Color("colorBannersErrorButtons", bundle: .module)
         }
 
         public enum Warning {
-            /// #FFF5E3 — Warning banner background
-            public static let background = Color(hex: "#FFF5E3")
-            /// #FBEFDA — Warning banner button
-            public static let buttons = Color(hex: "#FBEFDA")
+            public static let background = Color("colorBannersWarningBg", bundle: .module)
+            public static let buttons = Color("colorBannersWarningButtons", bundle: .module)
         }
+    }
+
+    // MARK: - Blue Background
+
+    public enum BlueBackground {
+        public static let inputBackground = Color("colorBlueBackgroundInputBackground", bundle: .module)
+        public static let buttonDisabled = Color("colorBlueBackgroundButtonDisabled", bundle: .module)
+        public static let buttonDisabledText = Color("colorBlueBackgroundButtonDisabledText", bundle: .module)
+    }
+
+    // MARK: - Home Theme
+
+    public enum HomeTheme {
+        public static let gradientBgOne = Color("colorHomeThemeGradientBgOne", bundle: .module)
+        public static let gradientBgTwo = Color("colorHomeThemeGradientBgTwo", bundle: .module)
+        public static let androidBar = Color("colorHomeThemeAndroidBar", bundle: .module)
+        public static let profileIcon = Color("colorHomeThemeProfileIcon", bundle: .module)
+        public static let loyaltyBackground = Color("colorHomeThemeLoyaltyBackground", bundle: .module)
+        public static let loyaltyText = Color("colorHomeThemeLoyaltyText", bundle: .module)
+        public static let iconsHeader = Color("colorHomeThemeIconsHeader", bundle: .module)
+        public static let iconsBalance = Color("colorHomeThemeIconsBalance", bundle: .module)
+        public static let bannerSurface = Color("colorHomeThemeBannerSurface", bundle: .module)
+        public static let bannerText = Color("colorHomeThemeBannerText", bundle: .module)
     }
 }

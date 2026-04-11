@@ -16,7 +16,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ADIBUIKit"
+            name: "ADIBUIKit",
+            resources: [
+                .process("Resources")
+            ]
         ),
     ]
 )
