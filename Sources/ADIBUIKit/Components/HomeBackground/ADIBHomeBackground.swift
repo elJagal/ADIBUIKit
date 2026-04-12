@@ -78,13 +78,11 @@ public struct ADIBHomeBackground<Content: View>: View {
 
     public var body: some View {
         ZStack(alignment: .top) {
-            // Layer 1: Base color — extends behind status bar
+            // Layer 1: Base color
             baseLayer
-                .ignoresSafeArea(edges: .top)
 
             // Layer 2: Texture overlay — soft-light gradient or custom image
             textureLayer
-                .ignoresSafeArea(edges: .top)
 
             // Layer 3: Top gradient — dark fade from the top edge
             topGradientLayer
