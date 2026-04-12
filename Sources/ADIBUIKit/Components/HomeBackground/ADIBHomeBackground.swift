@@ -33,7 +33,7 @@ public struct ADIBHomeBackground<Content: View>: View {
 
     private let theme: ADIBHomeBackgroundTheme
     private let textureImage: Image?
-    private let backgroundHeight: CGFloat
+    private let coloredHeight: CGFloat
     private let content: Content
 
     // MARK: - Constants
@@ -42,23 +42,28 @@ public struct ADIBHomeBackground<Content: View>: View {
     private let backgroundBlur: CGFloat = 35
     private let topGradientHeight: CGFloat = 78
 
+    /// Total component height = colored area + half of blur (extending into white)
+    private var totalHeight: CGFloat {
+        coloredHeight + blurHeight / 2
+    }
+
     // MARK: - Init
 
     /// Creates a layered home background.
     /// - Parameters:
     ///   - theme: The background theme (default `.white`)
     ///   - textureImage: Optional texture image for the overlay layer
-    ///   - backgroundHeight: Height of the colored background area (default 389pt)
+    ///   - coloredHeight: Height of the colored background area (default 389pt)
     ///   - content: The content to display on the background
     public init(
         theme: ADIBHomeBackgroundTheme = .white,
         textureImage: Image? = nil,
-        backgroundHeight: CGFloat = 431,
+        coloredHeight: CGFloat = 389,
         @ViewBuilder content: () -> Content
     ) {
         self.theme = theme
         self.textureImage = textureImage
-        self.backgroundHeight = backgroundHeight
+        self.coloredHeight = coloredHeight
         self.content = content()
     }
 
@@ -78,35 +83,41 @@ public struct ADIBHomeBackground<Content: View>: View {
 
     public var body: some View {
         ZStack(alignment: .top) {
-            // Layer 1: Base color
+            // Layer 1: Base color (389pt)
             baseLayer
 
-            // Layer 2: Texture overlay
+            // Layer 2: Texture overlay (389pt)
             textureLayer
 
-            // Layer 3: Top gradient
+            // Layer 3: Top gradient (78pt)
             topGradientLayer
 
-            // Layer 4: Bottom blur — frosted transition
+            // Layer 4: Bottom blur — straddles the boundary between dark and white
             bottomBlurLayer
 
             // Layer 5: Content
             content
         }
         .frame(maxWidth: .infinity)
-        .frame(height: backgroundHeight)
-        .clipped()
+        .frame(height: totalHeight)
     }
 
     // MARK: - Layer 1: Base Color
 
     @ViewBuilder
     private var baseLayer: some View {
-        switch theme {
-        case .white:
-            ADIBColors.background
-        case .mass:
-            ADIBColors.Text.base
+        VStack {
+            Group {
+                switch theme {
+                case .white:
+                    ADIBColors.background
+                case .mass:
+                    ADIBColors.Text.base
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: coloredHeight)
+            Spacer()
         }
     }
 
@@ -123,28 +134,30 @@ public struct ADIBHomeBackground<Content: View>: View {
             EmptyView()
 
         case .mass:
-            if let textureImage {
-                textureImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: backgroundHeight)
-                    .clipped()
-                    .blendMode(.softLight)
-            } else {
-                LinearGradient(
-                    stops: [
-                        .init(color: Color.black.opacity(0.7), location: 0),
-                        .init(color: Color.white.opacity(0.7), location: 0.5),
-                        .init(color: Color.black.opacity(0.7), location: 1.0)
-                    ],
-                    startPoint: gradientStart,
-                    endPoint: gradientEnd
-                )
+            VStack {
+                Group {
+                    if let textureImage {
+                        textureImage
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .blendMode(.softLight)
+                    } else {
+                        LinearGradient(
+                            stops: [
+                                .init(color: Color.black.opacity(0.7), location: 0),
+                                .init(color: Color.white.opacity(0.7), location: 0.5),
+                                .init(color: Color.black.opacity(0.7), location: 1.0)
+                            ],
+                            startPoint: gradientStart,
+                            endPoint: gradientEnd
+                        )
+                        .blendMode(.softLight)
+                    }
+                }
                 .frame(maxWidth: .infinity)
-                .frame(height: backgroundHeight)
+                .frame(height: coloredHeight)
                 .clipped()
-                .blendMode(.softLight)
+                Spacer()
             }
         }
     }
@@ -169,22 +182,25 @@ public struct ADIBHomeBackground<Content: View>: View {
     }
 
     // MARK: - Layer 4: Bottom Blur Transition
+    //
+    // 92pt tall, centered at the 389pt boundary:
+    // Top half overlaps the dark area, bottom half extends into white
 
     @ViewBuilder
     private var bottomBlurLayer: some View {
         if theme != .white {
             VStack(spacing: 0) {
                 Spacer()
-                    .frame(height: backgroundHeight - blurHeight / 2)
+                    .frame(height: coloredHeight - blurHeight / 2)
 
                 Rectangle()
                     .fill(Color.white.opacity(0.2))
                     .blur(radius: backgroundBlur)
                     .frame(maxWidth: .infinity)
                     .frame(height: blurHeight)
-                    .clipped(antialiased: false)
             }
             .frame(maxWidth: .infinity)
+            .frame(height: totalHeight)
         }
     }
 }
