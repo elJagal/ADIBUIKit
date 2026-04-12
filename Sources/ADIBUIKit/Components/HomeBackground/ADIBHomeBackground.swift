@@ -189,6 +189,9 @@ public struct ADIBHomeBackground<Content: View>: View {
     private var bottomBlurLayer: some View {
         if theme != .white {
             Image("home-blur-transition", bundle: .module)
+                .resizable()
+                .frame(maxWidth: .infinity)
+                .frame(height: blurHeight)
                 .offset(y: coloredHeight - blurHeight / 2)
         }
     }
