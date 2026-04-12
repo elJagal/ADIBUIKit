@@ -182,35 +182,20 @@ public struct ADIBHomeBackground<Content: View>: View {
         }
     }
 
-    // MARK: - Layer 4: Bottom Blend Transition
+    // MARK: - Layer 4: Bottom Blur Transition
     //
-    // 92pt tall, centered at the 389pt boundary:
-    // Top half overlaps the dark area, bottom half extends into white.
-    // Uses a gradient fade from base color → white for a smooth blend.
+    // 92pt tall, centered at the 389pt boundary.
+    // The rectangle is oversized (wider than the screen) so the
+    // blur renders correctly at the edges — matching Figma.
 
     @ViewBuilder
     private var bottomBlurLayer: some View {
         if theme != .white {
-            VStack(spacing: 0) {
-                Spacer()
-                    .frame(height: coloredHeight - blurHeight / 2)
-
-                LinearGradient(
-                    stops: [
-                        .init(color: ADIBColors.Text.base, location: 0),
-                        .init(color: ADIBColors.Text.base.opacity(0.8), location: 0.2),
-                        .init(color: ADIBColors.Text.base.opacity(0.4), location: 0.5),
-                        .init(color: ADIBColors.Text.base.opacity(0.1), location: 0.8),
-                        .init(color: Color.white, location: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(maxWidth: .infinity)
-                .frame(height: blurHeight)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: totalHeight)
+            Rectangle()
+                .fill(Color.white.opacity(0.2))
+                .frame(width: UIScreen.main.bounds.width + 200, height: blurHeight)
+                .blur(radius: backgroundBlur)
+                .offset(y: coloredHeight - blurHeight / 2)
         }
     }
 }
