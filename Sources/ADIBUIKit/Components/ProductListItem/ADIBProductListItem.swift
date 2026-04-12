@@ -12,6 +12,9 @@ public enum ADIBProductIconStyle {
 
     /// A logo/image inside a bordered container (e.g. other bank logos).
     case logoWithBorder(Image)
+
+    /// A direct avatar instance for full control over the avatar variant.
+    case avatar(ADIBAvatarType, iconColor: Color? = nil, backgroundColor: Color? = nil)
 }
 
 /// A product list item from the ADIB design system.
@@ -23,13 +26,14 @@ public enum ADIBProductIconStyle {
 /// - `.iconOnBackground`: Icon on a light blue surface (accounts, savings)
 /// - `.image`: Full card/product image (credit cards)
 /// - `.logoWithBorder`: Logo inside a bordered box (external banks)
+/// - `.avatar`: Direct avatar type for full variant control
 ///
 /// ```swift
 /// ADIBProductListItem(
 ///     iconStyle: .iconOnBackground(Image("cash-filled")),
 ///     title: "Current Account • 9876",
 ///     amount: "20,124.00",
-///     currencySymbol: "D"
+///     currencySymbol: "AED "
 /// )
 /// ```
 public struct ADIBProductListItem: View {
@@ -62,7 +66,7 @@ public struct ADIBProductListItem: View {
     ///   - title: The product name/description (e.g. "Current Account • 9876").
     ///   - subtitle: An optional secondary line (e.g. card holder name).
     ///   - amount: The balance or amount string (e.g. "20,124.00").
-    ///   - currencySymbol: The currency symbol to display (e.g. "D", "$", "€", "£").
+    ///   - currencySymbol: The currency symbol to display (e.g. "AED ", "$", "€", "£").
     ///   - onMoreTap: An optional action for the trailing more (•••) button.
     public init(
         iconStyle: ADIBProductIconStyle,
@@ -137,24 +141,14 @@ public struct ADIBProductListItem: View {
     private var leadingIcon: some View {
         switch iconStyle {
         case .iconOnBackground(let icon, let iconColor, let backgroundColor):
-            icon
-                .renderingMode(.template)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: iconSize, height: iconSize)
-                .foregroundStyle(iconColor ?? ADIBColors.Segment.accent)
-                .padding(iconBoxPadding)
-                .background(
-                    RoundedRectangle(cornerRadius: iconBoxRadius)
-                        .fill(backgroundColor ?? ADIBColors.Segment.surface)
-                )
+            ADIBAvatar(
+                type: .squareIcon(icon),
+                iconColor: iconColor,
+                backgroundColor: backgroundColor
+            )
 
         case .image(let image):
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: iconBoxSize, height: iconBoxSize)
-                .clipShape(RoundedRectangle(cornerRadius: iconBoxRadius))
+            ADIBAvatar(type: .image(image))
 
         case .logoWithBorder(let logo):
             logo
@@ -166,6 +160,13 @@ public struct ADIBProductListItem: View {
                     RoundedRectangle(cornerRadius: iconBoxRadius)
                         .stroke(ADIBColors.border, lineWidth: 0.5)
                 )
+
+        case .avatar(let avatarType, let iconColor, let backgroundColor):
+            ADIBAvatar(
+                type: avatarType,
+                iconColor: iconColor,
+                backgroundColor: backgroundColor
+            )
         }
     }
 }
@@ -182,7 +183,7 @@ public struct ADIBProductListItem: View {
                 iconStyle: .iconOnBackground(Image(systemName: "banknote.fill")),
                 title: "Current Account • 9876",
                 amount: "20,124.00",
-                currencySymbol: "D"
+                currencySymbol: "AED "
             )
 
             // USD Savings
@@ -193,20 +194,12 @@ public struct ADIBProductListItem: View {
                 currencySymbol: "$"
             )
 
-            // EUR Savings
+            // Initials
             ADIBProductListItem(
-                iconStyle: .iconOnBackground(Image(systemName: "eurosign.circle.fill")),
-                title: "Savings Account • 1234",
+                iconStyle: .avatar(.initials("Ahmed Mohamed")),
+                title: "Ahmed Mohamed",
                 amount: "20,124.00",
-                currencySymbol: "€"
-            )
-
-            // GBP Savings
-            ADIBProductListItem(
-                iconStyle: .iconOnBackground(Image(systemName: "sterlingsign.circle.fill")),
-                title: "Savings Account • 1234",
-                amount: "20,124.00",
-                currencySymbol: "£"
+                currencySymbol: "AED "
             )
 
             // Other Bank
@@ -214,7 +207,7 @@ public struct ADIBProductListItem: View {
                 iconStyle: .logoWithBorder(Image(systemName: "building.2.fill")),
                 title: "Account name • 1234",
                 amount: "20,124.00",
-                currencySymbol: "D"
+                currencySymbol: "AED "
             )
 
             // Card
@@ -222,49 +215,7 @@ public struct ADIBProductListItem: View {
                 iconStyle: .image(Image(systemName: "creditcard.fill")),
                 title: "Emirates Skywards • 9876",
                 amount: "100,000.00",
-                currencySymbol: "D"
-            )
-
-            // Card Supplementary (with subtitle)
-            ADIBProductListItem(
-                iconStyle: .image(Image(systemName: "creditcard.fill")),
-                title: "Smiles • 9876",
-                subtitle: "Mohamad Ahmed",
-                amount: "8,000.00",
-                currencySymbol: "D"
-            )
-
-            // Card Debit
-            ADIBProductListItem(
-                iconStyle: .image(Image(systemName: "creditcard.fill")),
-                title: "Visa Debit • 9876",
-                amount: "340,613.32",
-                currencySymbol: "D"
-            )
-
-            // BNPL
-            ADIBProductListItem(
-                iconStyle: .iconOnBackground(Image(systemName: "tag.fill")),
-                title: "Available limit",
-                amount: "50,000.00",
-                currencySymbol: "D",
-                onMoreTap: nil
-            )
-
-            // Smart Sukuk
-            ADIBProductListItem(
-                iconStyle: .iconOnBackground(Image(systemName: "chart.bar.fill")),
-                title: "Smart Sukuk",
-                amount: "200,124.00",
-                currencySymbol: "D"
-            )
-
-            // Wealth
-            ADIBProductListItem(
-                iconStyle: .iconOnBackground(Image(systemName: "leaf.fill")),
-                title: "Al baraka Sukuk LT...",
-                amount: "209,435.34",
-                currencySymbol: "D"
+                currencySymbol: "AED "
             )
         }
         .adibScreenPadding()
