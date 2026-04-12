@@ -135,7 +135,6 @@ public struct ADIBTabBar: View {
             }
             .frame(height: barHeight)
             .frame(maxWidth: .infinity)
-            .padding(.bottom, ADIBSizes.Spacing.xlarge) // 32pt bottom padding
             .background(
                 ADIBColors.background
                     .shadow(.drop(color: .black.opacity(0.1), radius: 7.5, y: -2))
