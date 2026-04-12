@@ -2,7 +2,7 @@ import SwiftUI
 
 extension Color {
     /// Creates a Color from a hex string (e.g., "#FF0000" or "FF0000").
-    init(hex: String) {
+    public init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
         let scanner = Scanner(string: hex)
         var rgbValue: UInt64 = 0
