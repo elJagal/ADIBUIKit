@@ -69,7 +69,7 @@ public struct ADIBProductListItem: View {
         title: String,
         subtitle: String? = nil,
         amount: String,
-        currencySymbol: String = "\u{E100}",
+        currencySymbol: String = "AED ",
         onMoreTap: (() -> Void)? = {}
     ) {
         self.iconStyle = iconStyle

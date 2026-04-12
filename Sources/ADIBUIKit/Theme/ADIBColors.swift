@@ -181,6 +181,29 @@ public enum ADIBColors {
                 startPoint: .bottomLeading, endPoint: .topTrailing
             )
         }
+
+        /// Blue palette gradient — 136° (#3773D4 → #2A57A1)
+        /// Used for story circle backgrounds
+        public static var gradientPaletteBlue: LinearGradient {
+            LinearGradient(
+                colors: [Palette.blueTwo, Palette.blueOne],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+        }
+
+        public enum StoryRing {
+            public static let start = Color("colorGradientsStoryRingStart", bundle: .module)
+            public static let end = Color("colorGradientsStoryRingEnd", bundle: .module)
+        }
+
+        /// Story ring gradient — -136° (#DCEFF5 → #32C4EE)
+        /// Used for the outer stroke ring on unseen stories
+        public static var gradientStoryRing: LinearGradient {
+            LinearGradient(
+                colors: [StoryRing.start, StoryRing.end],
+                startPoint: .bottomTrailing, endPoint: .topLeading
+            )
+        }
     }
 
     // MARK: - Charts / Graphs
