@@ -54,7 +54,7 @@ public struct ADIBHomeBackground<Content: View>: View {
     public init(
         theme: ADIBHomeBackgroundTheme = .white,
         textureImage: Image? = nil,
-        backgroundHeight: CGFloat = 389,
+        backgroundHeight: CGFloat = 431,
         @ViewBuilder content: () -> Content
     ) {
         self.theme = theme
