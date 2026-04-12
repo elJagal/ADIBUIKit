@@ -39,7 +39,8 @@ public struct ADIBHomeBackground<Content: View>: View {
     // MARK: - Constants
 
     private let blurHeight: CGFloat = 92
-    private let blurRadius: CGFloat = 21.5
+    private let layerBlur: CGFloat = 43
+    private let backgroundBlur: CGFloat = 35
     private let topGradientHeight: CGFloat = 78
 
     // MARK: - Init
@@ -152,17 +153,25 @@ public struct ADIBHomeBackground<Content: View>: View {
                 Spacer()
                     .frame(height: backgroundHeight - blurHeight / 2)
 
-                LinearGradient(
-                    stops: [
-                        .init(color: Color.black.opacity(0.7), location: 0),
-                        .init(color: Color.white.opacity(0.7), location: 0.5),
-                        .init(color: Color.black.opacity(0.7), location: 1.0)
-                    ],
-                    startPoint: gradientStart,
-                    endPoint: gradientEnd
-                )
+                ZStack {
+                    // Background blur layer (35)
+                    Rectangle()
+                        .fill(.ultraThinMaterial)
+                        .blur(radius: backgroundBlur)
+
+                    // Gradient layer with layer blur (43)
+                    LinearGradient(
+                        stops: [
+                            .init(color: Color.black.opacity(0.7), location: 0),
+                            .init(color: Color.white.opacity(0.7), location: 0.5),
+                            .init(color: Color.black.opacity(0.7), location: 1.0)
+                        ],
+                        startPoint: gradientStart,
+                        endPoint: gradientEnd
+                    )
+                    .blur(radius: layerBlur)
+                }
                 .frame(height: blurHeight)
-                .blur(radius: blurRadius)
             }
         }
     }
