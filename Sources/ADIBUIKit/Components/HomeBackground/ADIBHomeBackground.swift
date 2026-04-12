@@ -77,42 +77,49 @@ public struct ADIBHomeBackground<Content: View>: View {
     // MARK: - Body
 
     public var body: some View {
-        ZStack(alignment: .top) {
-            // Layer 1: Base color
-            baseLayer
+        GeometryReader { geo in
+            let safeTop = geo.safeAreaInsets.top
+            let totalHeight = backgroundHeight + safeTop
 
-            // Layer 2: Texture overlay — soft-light gradient or custom image
-            textureLayer
+            ZStack(alignment: .top) {
+                // Layer 1: Base color — extends behind status bar
+                baseLayer(height: totalHeight)
 
-            // Layer 3: Top gradient — starts at the very top
-            topGradientLayer
+                // Layer 2: Texture overlay — extends behind status bar
+                textureLayer(height: totalHeight)
 
-            // Layer 4: Bottom blur — frosted transition
-            bottomBlurLayer
+                // Layer 3: Top gradient — starts AFTER safe area
+                topGradientLayer
+                    .padding(.top, safeTop)
 
-            // Layer 5: Content
-            content
+                // Layer 4: Bottom blur — frosted transition
+                bottomBlurLayer(totalHeight: totalHeight)
+
+                // Layer 5: Content — starts after safe area
+                content
+                    .padding(.top, safeTop)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: totalHeight)
+            .clipped()
         }
-        .frame(maxWidth: .infinity)
         .frame(height: backgroundHeight)
-        .clipped()
+        .ignoresSafeArea(edges: .top)
     }
 
     // MARK: - Layer 1: Base Color
 
-    @ViewBuilder
-    private var baseLayer: some View {
-        switch theme {
-        case .white:
-            ADIBColors.background
-                .frame(maxWidth: .infinity)
-                .frame(height: backgroundHeight)
-
-        case .mass:
-            ADIBColors.Text.base
-                .frame(maxWidth: .infinity)
-                .frame(height: backgroundHeight)
+    private func baseLayer(height: CGFloat) -> some View {
+        Group {
+            switch theme {
+            case .white:
+                ADIBColors.background
+            case .mass:
+                ADIBColors.Text.base
+            }
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: height)
     }
 
     // MARK: - Layer 2: Texture Overlay
@@ -122,23 +129,21 @@ public struct ADIBHomeBackground<Content: View>: View {
     // If a custom textureImage is provided, it is used instead.
 
     @ViewBuilder
-    private var textureLayer: some View {
+    private func textureLayer(height: CGFloat) -> some View {
         switch theme {
         case .white:
             EmptyView()
 
         case .mass:
             if let textureImage {
-                // Custom texture image
                 textureImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: .infinity)
-                    .frame(height: backgroundHeight)
+                    .frame(height: height)
                     .clipped()
                     .blendMode(.softLight)
             } else {
-                // Default: 3-stop gradient texture
                 LinearGradient(
                     stops: [
                         .init(color: Color.black.opacity(0.7), location: 0),
@@ -149,14 +154,14 @@ public struct ADIBHomeBackground<Content: View>: View {
                     endPoint: gradientEnd
                 )
                 .frame(maxWidth: .infinity)
-                .frame(height: backgroundHeight)
+                .frame(height: height)
                 .clipped()
                 .blendMode(.softLight)
             }
         }
     }
 
-    // MARK: - Layer 3: Top Gradient
+    // MARK: - Layer 3: Top Gradient (starts after safe area)
 
     @ViewBuilder
     private var topGradientLayer: some View {
@@ -178,11 +183,11 @@ public struct ADIBHomeBackground<Content: View>: View {
     // MARK: - Layer 4: Bottom Blur Transition
 
     @ViewBuilder
-    private var bottomBlurLayer: some View {
+    private func bottomBlurLayer(totalHeight: CGFloat) -> some View {
         if theme != .white {
             VStack(spacing: 0) {
                 Spacer()
-                    .frame(height: backgroundHeight - blurHeight / 2)
+                    .frame(height: totalHeight - blurHeight / 2)
 
                 Rectangle()
                     .fill(Color.white.opacity(0.2))
