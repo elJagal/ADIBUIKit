@@ -67,19 +67,21 @@ public struct ADIBHomeBackground<Content: View>: View {
 
     public var body: some View {
         ZStack(alignment: .top) {
-            // Layer 1: Base color
+            // Layer 1: Base color — extends behind status bar
             baseLayer
+                .ignoresSafeArea(edges: .top)
 
             // Layer 2: Texture overlay
             textureLayer
+                .ignoresSafeArea(edges: .top)
 
-            // Layer 3: Top gradient
+            // Layer 3: Top gradient — starts after status bar
             topGradientLayer
 
-            // Layer 5: Bottom blur transition
+            // Layer 4: Bottom blur transition
             bottomBlurLayer
 
-            // Layer 4: Content
+            // Layer 5: Content
             content
         }
     }
@@ -126,7 +128,7 @@ public struct ADIBHomeBackground<Content: View>: View {
 
         case .mass:
             LinearGradient(
-                colors: [ADIBColors.Text.base, ADIBColors.Text.base.opacity(0)],
+                colors: [ADIBColors.Text.base.opacity(0), ADIBColors.Text.base],
                 startPoint: .top,
                 endPoint: .bottom
             )
