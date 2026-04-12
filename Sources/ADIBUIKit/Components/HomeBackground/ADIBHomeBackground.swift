@@ -166,7 +166,7 @@ public struct ADIBHomeBackground<Content: View>: View {
 
         case .mass:
             LinearGradient(
-                colors: [ADIBColors.HomeTheme.massGradient.opacity(0), ADIBColors.HomeTheme.massGradient],
+                colors: [ADIBColors.HomeTheme.massGradient, ADIBColors.HomeTheme.massGradient.opacity(0)],
                 startPoint: .top,
                 endPoint: .bottom
             )
