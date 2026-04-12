@@ -39,7 +39,6 @@ public struct ADIBHomeBackground<Content: View>: View {
     // MARK: - Constants
 
     private let blurHeight: CGFloat = 92
-    private let layerBlur: CGFloat = 43
     private let backgroundBlur: CGFloat = 35
     private let topGradientHeight: CGFloat = 78
 
@@ -63,6 +62,18 @@ public struct ADIBHomeBackground<Content: View>: View {
         self.content = content()
     }
 
+    // MARK: - Gradient Angle
+
+    /// Convert 39° to SwiftUI UnitPoints
+    /// 39° → approximately startPoint(0.18, 0.82) endPoint(0.82, 0.18)
+    private var gradientStart: UnitPoint {
+        UnitPoint(x: 0.18, y: 0.82)
+    }
+
+    private var gradientEnd: UnitPoint {
+        UnitPoint(x: 0.82, y: 0.18)
+    }
+
     // MARK: - Body
 
     public var body: some View {
@@ -71,14 +82,14 @@ public struct ADIBHomeBackground<Content: View>: View {
             baseLayer
                 .ignoresSafeArea(edges: .top)
 
-            // Layer 2: Texture overlay
+            // Layer 2: Texture overlay — soft-light gradient or custom image
             textureLayer
                 .ignoresSafeArea(edges: .top)
 
-            // Layer 3: Top gradient — starts after status bar
+            // Layer 3: Top gradient — dark fade from the top edge
             topGradientLayer
 
-            // Layer 4: Bottom blur transition
+            // Layer 4: Bottom blur — frosted transition
             bottomBlurLayer
 
             // Layer 5: Content
@@ -104,17 +115,43 @@ public struct ADIBHomeBackground<Content: View>: View {
     }
 
     // MARK: - Layer 2: Texture Overlay
+    //
+    // 3-stop linear gradient at 39° with soft-light blend on top of base:
+    // 0%: #000000 70% → 50%: #FFFFFF 70% → 100%: #000000 70%
+    // If a custom textureImage is provided, it is used instead.
 
     @ViewBuilder
     private var textureLayer: some View {
-        if let textureImage, theme != .white {
-            textureImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+        switch theme {
+        case .white:
+            EmptyView()
+
+        case .mass:
+            if let textureImage {
+                // Custom texture image
+                textureImage
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: backgroundHeight)
+                    .clipped()
+                    .blendMode(.softLight)
+            } else {
+                // Default: 3-stop gradient texture
+                LinearGradient(
+                    stops: [
+                        .init(color: Color.black.opacity(0.7), location: 0),
+                        .init(color: Color.white.opacity(0.7), location: 0.5),
+                        .init(color: Color.black.opacity(0.7), location: 1.0)
+                    ],
+                    startPoint: gradientStart,
+                    endPoint: gradientEnd
+                )
                 .frame(maxWidth: .infinity)
                 .frame(height: backgroundHeight)
                 .clipped()
                 .blendMode(.softLight)
+            }
         }
     }
 
@@ -137,20 +174,7 @@ public struct ADIBHomeBackground<Content: View>: View {
         }
     }
 
-    // MARK: - Layer 4: Bottom Gradient Overlay
-    //
-    // Linear gradient at 39° on top of Text.base:
-    // 0%: #000000 70% → 50%: #FFFFFF 70% → 100%: #000000 70%
-
-    /// Convert degrees to SwiftUI UnitPoints
-    /// 39° → approximately startPoint(0.18, 0.82) endPoint(0.82, 0.18)
-    private var gradientStart: UnitPoint {
-        UnitPoint(x: 0.18, y: 0.82)
-    }
-
-    private var gradientEnd: UnitPoint {
-        UnitPoint(x: 0.82, y: 0.18)
-    }
+    // MARK: - Layer 4: Bottom Blur Transition
 
     @ViewBuilder
     private var bottomBlurLayer: some View {
@@ -159,27 +183,12 @@ public struct ADIBHomeBackground<Content: View>: View {
                 Spacer()
                     .frame(height: backgroundHeight - blurHeight / 2)
 
-                ZStack {
-                    // Background blur layer (35) — white 20% opacity
-                    Rectangle()
-                        .fill(Color.white.opacity(0.2))
-                        .blur(radius: backgroundBlur)
-
-                    // Gradient layer with layer blur (43)
-                    LinearGradient(
-                        stops: [
-                            .init(color: Color.black.opacity(0.7), location: 0),
-                            .init(color: Color.white.opacity(0.7), location: 0.5),
-                            .init(color: Color.black.opacity(0.7), location: 1.0)
-                        ],
-                        startPoint: gradientStart,
-                        endPoint: gradientEnd
-                    )
-                    .blur(radius: layerBlur)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: blurHeight)
-                .clipped(antialiased: false)
+                Rectangle()
+                    .fill(Color.white.opacity(0.2))
+                    .blur(radius: backgroundBlur)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: blurHeight)
+                    .clipped(antialiased: false)
             }
             .frame(maxWidth: .infinity)
         }
