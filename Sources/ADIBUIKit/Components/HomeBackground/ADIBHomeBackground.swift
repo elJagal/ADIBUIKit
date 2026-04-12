@@ -95,6 +95,9 @@ public struct ADIBHomeBackground<Content: View>: View {
             // Layer 5: Content
             content
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: backgroundHeight)
+        .clipped()
     }
 
     // MARK: - Layer 1: Base Color
