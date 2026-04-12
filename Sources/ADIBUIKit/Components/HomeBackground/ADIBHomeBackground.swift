@@ -39,8 +39,6 @@ public struct ADIBHomeBackground<Content: View>: View {
     // MARK: - Constants
 
     private let blurHeight: CGFloat = 92
-    private let layerBlur: CGFloat = 43
-    private let backgroundBlur: CGFloat = 35
     private let topGradientHeight: CGFloat = 78
 
     /// Total component height = colored area + half of blur (extending into white)
@@ -184,17 +182,16 @@ public struct ADIBHomeBackground<Content: View>: View {
 
     // MARK: - Layer 4: Bottom Blur Transition
     //
-    // 92pt tall, centered at the 389pt boundary.
-    // The rectangle is oversized (wider than the screen) so the
-    // blur renders correctly at the edges — matching Figma.
+    // 92pt tall image, centered at the 389pt boundary.
+    // Exported from Figma as a pre-rendered blur image.
 
     @ViewBuilder
     private var bottomBlurLayer: some View {
         if theme != .white {
-            Rectangle()
-                .fill(Color.white.opacity(0.2))
-                .frame(width: UIScreen.main.bounds.width + 200, height: blurHeight)
-                .blur(radius: backgroundBlur)
+            Image("home-blur-transition", bundle: .module)
+                .resizable()
+                .frame(maxWidth: .infinity)
+                .frame(height: blurHeight)
                 .offset(y: coloredHeight - blurHeight / 2)
         }
     }
