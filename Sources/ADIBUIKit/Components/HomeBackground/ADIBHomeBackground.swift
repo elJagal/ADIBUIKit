@@ -188,13 +188,8 @@ public struct ADIBHomeBackground<Content: View>: View {
     @ViewBuilder
     private var bottomBlurLayer: some View {
         if theme != .white {
-            VStack(spacing: 0) {
-                Spacer()
-                    .frame(height: coloredHeight - blurHeight / 2)
-                Image("home-blur-transition", bundle: .module)
-                Spacer(minLength: 0)
-            }
-            .frame(height: totalHeight)
+            Image("home-blur-transition", bundle: .module)
+                .offset(y: coloredHeight - blurHeight / 2)
         }
     }
 }
