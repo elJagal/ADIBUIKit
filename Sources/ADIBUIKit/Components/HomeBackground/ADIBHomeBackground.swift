@@ -182,10 +182,11 @@ public struct ADIBHomeBackground<Content: View>: View {
         }
     }
 
-    // MARK: - Layer 4: Bottom Blur Transition
+    // MARK: - Layer 4: Bottom Blend Transition
     //
     // 92pt tall, centered at the 389pt boundary:
-    // Top half overlaps the dark area, bottom half extends into white
+    // Top half overlaps the dark area, bottom half extends into white.
+    // Uses a gradient fade from base color → white for a smooth blend.
 
     @ViewBuilder
     private var bottomBlurLayer: some View {
@@ -194,20 +195,17 @@ public struct ADIBHomeBackground<Content: View>: View {
                 Spacer()
                     .frame(height: coloredHeight - blurHeight / 2)
 
-                ZStack {
-                    // Background blur — white 20% opacity
-                    Rectangle()
-                        .fill(Color.white.opacity(0.2))
-                        .blur(radius: backgroundBlur)
-
-                    // Layer blur — white gradient for stronger blend
-                    LinearGradient(
-                        colors: [Color.white.opacity(0), Color.white],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .blur(radius: layerBlur)
-                }
+                LinearGradient(
+                    stops: [
+                        .init(color: ADIBColors.Text.base, location: 0),
+                        .init(color: ADIBColors.Text.base.opacity(0.8), location: 0.2),
+                        .init(color: ADIBColors.Text.base.opacity(0.4), location: 0.5),
+                        .init(color: ADIBColors.Text.base.opacity(0.1), location: 0.8),
+                        .init(color: Color.white, location: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
                 .frame(maxWidth: .infinity)
                 .frame(height: blurHeight)
             }
