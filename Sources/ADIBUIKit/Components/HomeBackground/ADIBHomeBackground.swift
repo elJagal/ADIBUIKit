@@ -154,9 +154,9 @@ public struct ADIBHomeBackground<Content: View>: View {
                     .frame(height: backgroundHeight - blurHeight / 2)
 
                 ZStack {
-                    // Background blur layer (35)
+                    // Background blur layer (35) — white 20% opacity
                     Rectangle()
-                        .fill(.ultraThinMaterial)
+                        .fill(Color.white.opacity(0.2))
                         .blur(radius: backgroundBlur)
 
                     // Gradient layer with layer blur (43)
