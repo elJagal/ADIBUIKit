@@ -130,19 +130,39 @@ public struct ADIBHomeBackground<Content: View>: View {
         }
     }
 
-    // MARK: - Layer 5: Bottom Blur Transition
+    // MARK: - Layer 4: Bottom Gradient Overlay
+    //
+    // Linear gradient at 39° on top of Text.base:
+    // 0%: #000000 70% → 50%: #FFFFFF 70% → 100%: #000000 70%
+
+    /// Convert degrees to SwiftUI UnitPoints
+    /// 39° → approximately startPoint(0.18, 0.82) endPoint(0.82, 0.18)
+    private var gradientStart: UnitPoint {
+        UnitPoint(x: 0.18, y: 0.82)
+    }
+
+    private var gradientEnd: UnitPoint {
+        UnitPoint(x: 0.82, y: 0.18)
+    }
 
     @ViewBuilder
     private var bottomBlurLayer: some View {
         if theme != .white {
-            VStack {
+            VStack(spacing: 0) {
                 Spacer()
                     .frame(height: backgroundHeight - blurHeight / 2)
 
-                Rectangle()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(height: blurHeight)
-                    .blur(radius: blurRadius)
+                LinearGradient(
+                    stops: [
+                        .init(color: Color.black.opacity(0.7), location: 0),
+                        .init(color: Color.white.opacity(0.7), location: 0.5),
+                        .init(color: Color.black.opacity(0.7), location: 1.0)
+                    ],
+                    startPoint: gradientStart,
+                    endPoint: gradientEnd
+                )
+                .frame(height: blurHeight)
+                .blur(radius: blurRadius)
             }
         }
     }
