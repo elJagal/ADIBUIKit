@@ -116,7 +116,8 @@ struct ADIBFeatureCardVertical: View {
 
             if item.showBeta {
                 ADIBTag("Beta", type: .warning, showLeadingIcon: false, showTrailingIcon: false)
-                    .padding(ADIBSizes.Spacing.xsmall)
+                    .padding(.top, ADIBSizes.Spacing.small)
+                        .padding(.trailing, ADIBSizes.Spacing.small)
             }
         }
     }
@@ -126,10 +127,12 @@ struct ADIBFeatureCardVertical: View {
             Text(item.title)
                 .adibTextStyle(ADIBTypography.body.semibold)
                 .lineLimit(1)
+                .truncationMode(.tail)
 
             Text(item.subtitle)
                 .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.subdued)
                 .lineLimit(1)
+                .truncationMode(.tail)
         }
     }
 }
@@ -166,7 +169,8 @@ struct ADIBFeatureCardHorizontal: View {
 
                     if item.showBeta {
                         ADIBTag("Beta", type: .warning, showLeadingIcon: false, showTrailingIcon: false)
-                            .padding(ADIBSizes.Spacing.xsmall)
+                            .padding(.top, ADIBSizes.Spacing.small)
+                        .padding(.trailing, ADIBSizes.Spacing.small)
                     }
                 }
 
@@ -174,11 +178,13 @@ struct ADIBFeatureCardHorizontal: View {
                 VStack(alignment: .leading, spacing: ADIBSizes.Spacing.xsmall) {
                     Text(item.title)
                         .adibTextStyle(ADIBTypography.body.semibold)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .truncationMode(.tail)
 
                     Text(item.subtitle)
                         .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.subdued)
                         .lineLimit(2)
+                        .truncationMode(.tail)
                 }
 
                 Spacer(minLength: 0)
