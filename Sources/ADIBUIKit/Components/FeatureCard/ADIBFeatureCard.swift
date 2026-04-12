@@ -151,9 +151,9 @@ struct ADIBFeatureCardHorizontal: View {
         Button {
             item.onTap?()
         } label: {
-            ZStack(alignment: .topTrailing) {
-                HStack(spacing: ADIBSizes.Spacing.small) {
-                    // Image
+            HStack(spacing: ADIBSizes.Spacing.small) {
+                // Image with Beta tag overlay
+                ZStack(alignment: .topTrailing) {
                     item.image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -164,25 +164,24 @@ struct ADIBFeatureCardHorizontal: View {
                                 .fill(ADIBColors.Surface.components)
                         )
 
-                    // Text content
-                    VStack(alignment: .leading, spacing: ADIBSizes.Spacing.xsmall) {
-                        Text(item.title)
-                            .adibTextStyle(ADIBTypography.body.semibold)
-                            .lineLimit(1)
-
-                        Text(item.subtitle)
-                            .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.subdued)
-                            .lineLimit(2)
+                    if item.showBeta {
+                        ADIBTag("Beta", type: .warning, showLeadingIcon: false, showTrailingIcon: false)
+                            .padding(ADIBSizes.Spacing.xsmall)
                     }
-
-                    Spacer(minLength: 0)
                 }
 
-                // Beta tag
-                if item.showBeta {
-                    ADIBTag("Beta", type: .warning, showLeadingIcon: false, showTrailingIcon: false)
-                        .padding(ADIBSizes.Spacing.xsmall)
+                // Text content
+                VStack(alignment: .leading, spacing: ADIBSizes.Spacing.xsmall) {
+                    Text(item.title)
+                        .adibTextStyle(ADIBTypography.body.semibold)
+                        .lineLimit(1)
+
+                    Text(item.subtitle)
+                        .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.subdued)
+                        .lineLimit(2)
                 }
+
+                Spacer(minLength: 0)
             }
         }
         .buttonStyle(.plain)
