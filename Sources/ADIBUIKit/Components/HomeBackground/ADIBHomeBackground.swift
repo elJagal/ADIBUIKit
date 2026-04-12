@@ -77,25 +77,31 @@ public struct ADIBHomeBackground<Content: View>: View {
     // MARK: - Body
 
     public var body: some View {
-        ZStack(alignment: .top) {
-            // Layer 1: Base color
-            baseLayer
+        GeometryReader { geo in
+            let safeTop = geo.safeAreaInsets.top
 
-            // Layer 2: Texture overlay — soft-light gradient or custom image
-            textureLayer
+            ZStack(alignment: .top) {
+                // Layer 1: Base color
+                baseLayer
 
-            // Layer 3: Top gradient — dark fade from the top edge
-            topGradientLayer
+                // Layer 2: Texture overlay — soft-light gradient or custom image
+                textureLayer
 
-            // Layer 4: Bottom blur — frosted transition
-            bottomBlurLayer
+                // Layer 3: Top gradient — starts at the very top (behind status bar)
+                topGradientLayer
 
-            // Layer 5: Content
-            content
+                // Layer 4: Bottom blur — frosted transition
+                bottomBlurLayer
+
+                // Layer 5: Content — pushed below status bar
+                content
+                    .padding(.top, safeTop)
+            }
         }
         .frame(maxWidth: .infinity)
         .frame(height: backgroundHeight)
         .clipped()
+        .ignoresSafeArea(edges: .top)
     }
 
     // MARK: - Layer 1: Base Color
