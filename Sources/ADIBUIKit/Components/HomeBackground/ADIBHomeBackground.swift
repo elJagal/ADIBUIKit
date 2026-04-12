@@ -91,10 +91,12 @@ public struct ADIBHomeBackground<Content: View>: View {
         switch theme {
         case .white:
             ADIBColors.background
+                .frame(maxWidth: .infinity)
                 .frame(height: backgroundHeight)
 
         case .mass:
             ADIBColors.Text.base
+                .frame(maxWidth: .infinity)
                 .frame(height: backgroundHeight)
         }
     }
@@ -107,6 +109,7 @@ public struct ADIBHomeBackground<Content: View>: View {
             textureImage
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity)
                 .frame(height: backgroundHeight)
                 .clipped()
                 .blendMode(.softLight)
@@ -127,6 +130,7 @@ public struct ADIBHomeBackground<Content: View>: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
+            .frame(maxWidth: .infinity)
             .frame(height: topGradientHeight)
         }
     }
@@ -171,8 +175,11 @@ public struct ADIBHomeBackground<Content: View>: View {
                     )
                     .blur(radius: layerBlur)
                 }
+                .frame(maxWidth: .infinity)
                 .frame(height: blurHeight)
+                .clipped(antialiased: false)
             }
+            .frame(maxWidth: .infinity)
         }
     }
 }
