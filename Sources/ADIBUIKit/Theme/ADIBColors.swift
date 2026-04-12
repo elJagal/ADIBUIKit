@@ -280,6 +280,8 @@ public enum ADIBColors {
     public enum HomeTheme {
         public static let gradientBgOne = Color("colorHomeThemeGradientBgOne", bundle: .module)
         public static let gradientBgTwo = Color("colorHomeThemeGradientBgTwo", bundle: .module)
+        /// Mass segment top gradient color — #032051
+        public static let massGradient = Color("colorHomeThemeMassGradient", bundle: .module)
         public static let androidBar = Color("colorHomeThemeAndroidBar", bundle: .module)
         public static let profileIcon = Color("colorHomeThemeProfileIcon", bundle: .module)
         public static let loyaltyBackground = Color("colorHomeThemeLoyaltyBackground", bundle: .module)
