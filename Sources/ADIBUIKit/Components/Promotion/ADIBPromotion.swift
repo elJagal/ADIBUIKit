@@ -46,6 +46,7 @@ public struct ADIBPromotion: View {
     private let heading: String
     private let description: String?
     private let callToAction: String?
+    private let showArrow: Bool
     private let onTap: (() -> Void)?
 
     // MARK: - Constants (Large)
@@ -69,6 +70,7 @@ public struct ADIBPromotion: View {
     private let smallImageRadius: CGFloat = ADIBSizes.Radius.small              // 12
     private let smallContentGap: CGFloat = 12
     private let smallTextGap: CGFloat = ADIBSizes.Spacing.xxsmall              // 2
+    private let smallArrowSize: CGFloat = ADIBSizes.Spacing.large              // 24
 
     // MARK: - Init
 
@@ -79,6 +81,7 @@ public struct ADIBPromotion: View {
     ///   - heading: The heading text.
     ///   - description: The description text (used in `.small` variant).
     ///   - callToAction: The call-to-action text (used in `.large` variant).
+    ///   - showArrow: Whether to show a trailing arrow (used in `.small` variant, default `false`).
     ///   - onTap: Optional tap action.
     public init(
         size: ADIBPromotionSize = .large,
@@ -86,6 +89,7 @@ public struct ADIBPromotion: View {
         heading: String,
         description: String? = nil,
         callToAction: String? = nil,
+        showArrow: Bool = false,
         onTap: (() -> Void)? = nil
     ) {
         self.size = size
@@ -93,6 +97,7 @@ public struct ADIBPromotion: View {
         self.heading = heading
         self.description = description
         self.callToAction = callToAction
+        self.showArrow = showArrow
         self.onTap = onTap
     }
 
@@ -171,14 +176,18 @@ public struct ADIBPromotion: View {
     // MARK: - Small Layout
     // =========================================================================
 
-    /// 60×60 image thumbnail + heading + description.
+    /// 60×60 image/icon box + heading + description + optional arrow.
     private var smallLayout: some View {
         HStack(alignment: .center, spacing: smallContentGap) {
-            // Image thumbnail
+            // Icon/Image box
             image
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: smallImageSize, height: smallImageSize)
+                .background(
+                    RoundedRectangle(cornerRadius: smallImageRadius)
+                        .fill(ADIBColors.Surface.blueOne)
+                )
                 .clipShape(RoundedRectangle(cornerRadius: smallImageRadius))
 
             // Text content
@@ -195,12 +204,20 @@ public struct ADIBPromotion: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Trailing arrow
+            if showArrow {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(ADIBColors.Text.subdued)
+                    .frame(width: smallArrowSize, height: smallArrowSize)
+            }
         }
         .padding(smallPadding)
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: smallContainerRadius)
-                .fill(ADIBColors.Segment.Mass.two)
+                .fill(ADIBColors.Segment.surface)
         )
         .clipShape(RoundedRectangle(cornerRadius: smallContainerRadius))
     }
@@ -225,9 +242,10 @@ public struct ADIBPromotion: View {
     VStack(spacing: ADIBSizes.Spacing.medium) {
         ADIBPromotion(
             size: .small,
-            image: Image(systemName: "cup.and.saucer.fill"),
-            heading: "Promotional heading here",
-            description: "Description here. Max two lines of content goes here.",
+            image: Image(systemName: "dollarsign.circle.fill"),
+            heading: "Get Finance",
+            description: "Kick start your financial goals with our financing solutions",
+            showArrow: true,
             onTap: { print("Promotion tapped") }
         )
 
