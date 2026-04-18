@@ -250,23 +250,17 @@ public struct ADIBBanner: View {
     // MARK: - No Heading Layout
     // =========================================================================
 
-    /// Icon + description only
+    /// Icon + description only.
+    /// Single-line → centre-aligned; multi-line → top-aligned.
     private var noHeadingLayout: some View {
-        HStack(alignment: .top, spacing: iconTextGap) {
-            iconView
-
-            Text(description)
-                .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(noHeadingPadding)
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: containerRadius)
-                .fill(style.backgroundColor)
+        NoHeadingBannerLayout(
+            icon: iconView,
+            description: description,
+            style: style,
+            iconTextGap: iconTextGap,
+            padding: noHeadingPadding,
+            cornerRadius: containerRadius
         )
-        .clipShape(RoundedRectangle(cornerRadius: containerRadius))
     }
 
     // =========================================================================
@@ -318,6 +312,50 @@ public struct ADIBBanner: View {
             }
         }
         .background(style.buttonsBackground)
+    }
+}
+
+// MARK: - No Heading Layout (adaptive alignment)
+
+/// Internal helper that measures text height and switches between
+/// `.center` (single line) and `.top` (multi-line) alignment.
+private struct NoHeadingBannerLayout<Icon: View>: View {
+
+    let icon: Icon
+    let description: String
+    let style: ADIBBannerStyle
+    let iconTextGap: CGFloat
+    let padding: CGFloat
+    let cornerRadius: CGFloat
+
+    @State private var isMultiline = false
+
+    var body: some View {
+        HStack(alignment: isMultiline ? .top : .center, spacing: iconTextGap) {
+            icon
+
+            Text(description)
+                .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    GeometryReader { geo in
+                        // Caption regular line-height is ~18pt; if height > 20 → multi-line
+                        Color.clear
+                            .onAppear { isMultiline = geo.size.height > 20 }
+                            .onChange(of: geo.size.height) { newHeight in
+                                isMultiline = newHeight > 20
+                            }
+                    }
+                )
+        }
+        .padding(padding)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(style.backgroundColor)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }
 }
 
