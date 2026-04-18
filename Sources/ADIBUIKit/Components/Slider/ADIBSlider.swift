@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 // MARK: - Slider Component
 
@@ -72,7 +75,13 @@ public struct ADIBSlider: View {
     public var body: some View {
         VStack(spacing: labelGap) {
             sliderView
-                .tint(ADIBColors.Brand.Primary.one)
+                .tint(ADIBColors.interaction)
+                .accentColor(ADIBColors.interaction)
+                #if canImport(UIKit)
+                .onAppear {
+                    UISlider.appearance().maximumTrackTintColor = UIColor(ADIBColors.Surface.components)
+                }
+                #endif
 
             // Min / Max labels
             if minLabel != nil || maxLabel != nil {
