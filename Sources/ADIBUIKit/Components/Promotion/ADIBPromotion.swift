@@ -180,15 +180,17 @@ public struct ADIBPromotion: View {
     private var smallLayout: some View {
         HStack(alignment: .center, spacing: smallContentGap) {
             // Icon/Image box
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: smallImageSize, height: smallImageSize)
-                .background(
-                    RoundedRectangle(cornerRadius: smallImageRadius)
-                        .fill(ADIBColors.Surface.blueOne)
-                )
-                .clipShape(RoundedRectangle(cornerRadius: smallImageRadius))
+            ZStack {
+                RoundedRectangle(cornerRadius: smallImageRadius)
+                    .fill(ADIBColors.Surface.blueOne)
+                    .frame(width: smallImageSize, height: smallImageSize)
+
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: smallImageSize, height: smallImageSize)
+                    .clipShape(RoundedRectangle(cornerRadius: smallImageRadius))
+            }
 
             // Text content
             VStack(alignment: .leading, spacing: smallTextGap) {
@@ -209,7 +211,7 @@ public struct ADIBPromotion: View {
             if showArrow {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(ADIBColors.Text.subdued)
+                    .foregroundStyle(ADIBColors.Text.base)
                     .frame(width: smallArrowSize, height: smallArrowSize)
             }
         }
