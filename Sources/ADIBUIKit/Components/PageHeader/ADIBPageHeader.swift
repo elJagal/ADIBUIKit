@@ -403,7 +403,7 @@ public struct ADIBPageHeader: View {
     // MARK: - Shared Back Icon
 
     private var backIconView: some View {
-        (backIcon ?? Image(systemName: "chevron.left"))
+        (backIcon ?? Image("chevron-left", bundle: .module))
             .renderingMode(.template)
             .resizable()
             .aspectRatio(contentMode: .fit)
