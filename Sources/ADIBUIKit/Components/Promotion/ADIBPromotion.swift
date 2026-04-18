@@ -46,7 +46,7 @@ public struct ADIBPromotion: View {
     private let heading: String
     private let description: String?
     private let callToAction: String?
-    private let showArrow: Bool
+    private let arrowIcon: Image?
     private let onTap: (() -> Void)?
 
     // MARK: - Constants (Large)
@@ -81,7 +81,7 @@ public struct ADIBPromotion: View {
     ///   - heading: The heading text.
     ///   - description: The description text (used in `.small` variant).
     ///   - callToAction: The call-to-action text (used in `.large` variant).
-    ///   - showArrow: Whether to show a trailing arrow (used in `.small` variant, default `false`).
+    ///   - arrowIcon: Optional trailing arrow image (used in `.small` variant). Pass `nil` for no arrow.
     ///   - onTap: Optional tap action.
     public init(
         size: ADIBPromotionSize = .large,
@@ -89,7 +89,7 @@ public struct ADIBPromotion: View {
         heading: String,
         description: String? = nil,
         callToAction: String? = nil,
-        showArrow: Bool = false,
+        arrowIcon: Image? = nil,
         onTap: (() -> Void)? = nil
     ) {
         self.size = size
@@ -97,7 +97,7 @@ public struct ADIBPromotion: View {
         self.heading = heading
         self.description = description
         self.callToAction = callToAction
-        self.showArrow = showArrow
+        self.arrowIcon = arrowIcon
         self.onTap = onTap
     }
 
@@ -208,11 +208,13 @@ public struct ADIBPromotion: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             // Trailing arrow
-            if showArrow {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(ADIBColors.Text.base)
+            if let arrowIcon {
+                arrowIcon
+                    .renderingMode(.template)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: smallArrowSize, height: smallArrowSize)
+                    .foregroundStyle(ADIBColors.Text.base)
             }
         }
         .padding(smallPadding)
@@ -247,7 +249,7 @@ public struct ADIBPromotion: View {
             image: Image(systemName: "dollarsign.circle.fill"),
             heading: "Get Finance",
             description: "Kick start your financial goals with our financing solutions",
-            showArrow: true,
+            arrowIcon: Image(systemName: "chevron.right"),
             onTap: { print("Promotion tapped") }
         )
 
