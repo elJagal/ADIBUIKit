@@ -18,6 +18,9 @@ public enum ADIBAccountSelectionType {
 
     /// Empty state — plus-circle icon + "Select an account".
     case emptyState
+
+    /// Beneficiary detail — heading + full name + bank info row (icon + bank name + account).
+    case beneficiary
 }
 
 // MARK: - Account Selection Component
@@ -84,6 +87,10 @@ public struct ADIBAccountSelection: View {
     private let showFlag: Bool
     private let emptyStateIcon: Image?
     private let emptyStateText: String
+    private let beneficiaryName: String?
+    private let bankIcon: Image?
+    private let bankName: String?
+    private let accountNumber: String?
     private let errorText: String?
     private let isDisabled: Bool
     private let onTap: (() -> Void)?
@@ -98,6 +105,8 @@ public struct ADIBAccountSelection: View {
     private let iconSize: CGFloat = ADIBSizes.Spacing.large                    // 24
     private let flagSize: CGFloat = 18
     private let flagRadius: CGFloat = 12
+    private let bankIconSize: CGFloat = 20
+    private let bankInfoGap: CGFloat = 6
     private let amountLabelGap: CGFloat = ADIBSizes.Spacing.xsmall            // 4
     private let separatorGap: CGFloat = ADIBSizes.Spacing.medium              // 16
     private let emptyStateHeight: CGFloat = 72
@@ -119,6 +128,10 @@ public struct ADIBAccountSelection: View {
     ///   - showFlag: Whether to show the flag image (default `true`).
     ///   - emptyStateIcon: The icon for empty state (defaults to plus.circle.fill).
     ///   - emptyStateText: The text for empty state (default "Select an account").
+    ///   - beneficiaryName: The beneficiary full name (used in `.beneficiary`).
+    ///   - bankIcon: The bank icon image (used in `.beneficiary`).
+    ///   - bankName: The bank name text (used in `.beneficiary`).
+    ///   - accountNumber: The account number (used in `.beneficiary`).
     ///   - errorText: Optional error text below the card.
     ///   - isDisabled: Whether the component is disabled (default `false`).
     ///   - onTap: The action when the card is tapped.
@@ -136,6 +149,10 @@ public struct ADIBAccountSelection: View {
         showFlag: Bool = true,
         emptyStateIcon: Image? = nil,
         emptyStateText: String = "Select an account",
+        beneficiaryName: String? = nil,
+        bankIcon: Image? = nil,
+        bankName: String? = nil,
+        accountNumber: String? = nil,
         errorText: String? = nil,
         isDisabled: Bool = false,
         onTap: (() -> Void)? = nil
@@ -153,6 +170,10 @@ public struct ADIBAccountSelection: View {
         self.showFlag = showFlag
         self.emptyStateIcon = emptyStateIcon
         self.emptyStateText = emptyStateText
+        self.beneficiaryName = beneficiaryName
+        self.bankIcon = bankIcon
+        self.bankName = bankName
+        self.accountNumber = accountNumber
         self.errorText = errorText
         self.isDisabled = isDisabled
         self.onTap = onTap
@@ -186,6 +207,8 @@ public struct ADIBAccountSelection: View {
             toCard
         case .emptyState:
             emptyStateCard
+        case .beneficiary:
+            beneficiaryCard
         }
     }
 
@@ -330,6 +353,58 @@ public struct ADIBAccountSelection: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: emptyStateHeight)
         .padding(.horizontal, horizontalPadding)
+        .background(containerBackground)
+    }
+
+    // =========================================================================
+    // MARK: - Beneficiary Variant
+    // =========================================================================
+
+    /// Heading + beneficiary name + bank info row (icon + bank name • account number)
+    private var beneficiaryCard: some View {
+        VStack(alignment: .leading, spacing: ADIBSizes.Spacing.xsmall) {
+            // Heading + beneficiary name
+            VStack(alignment: .leading, spacing: ADIBSizes.Spacing.xsmall) {
+                if let heading {
+                    Text(heading)
+                        .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
+                        .lineLimit(1)
+                }
+
+                if let beneficiaryName, !beneficiaryName.isEmpty {
+                    Text(beneficiaryName)
+                        .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.base)
+                        .lineLimit(1)
+                }
+            }
+
+            // Bank info row
+            HStack(spacing: bankInfoGap) {
+                if let bankIcon {
+                    bankIcon
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: bankIconSize, height: bankIconSize)
+                        .foregroundStyle(ADIBColors.Text.base)
+                }
+
+                if let bankName {
+                    Text(bankName)
+                        .adibTextStyle(ADIBTypography.caption.semibold, color: ADIBColors.Text.base)
+                }
+
+                if let accountNumber {
+                    Text("•")
+                        .adibTextStyle(ADIBTypography.caption.semibold, color: ADIBColors.Text.base)
+                    Text(accountNumber)
+                        .adibTextStyle(ADIBTypography.caption.semibold, color: ADIBColors.Text.base)
+                }
+            }
+        }
+        .padding(.horizontal, horizontalPadding)
+        .padding(.vertical, defaultVerticalPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(containerBackground)
     }
 
