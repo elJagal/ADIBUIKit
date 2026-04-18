@@ -126,7 +126,7 @@ public struct ADIBActionListItem: View {
                 if showSeparator {
                     Rectangle()
                         .fill(ADIBColors.border)
-                        .frame(width: separatorWidth, height: 1)
+                        .frame(width: separatorWidth, height: 0.5)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
@@ -137,7 +137,7 @@ public struct ADIBActionListItem: View {
     // MARK: - Avatar with New Tag
 
     private var avatarView: some View {
-        ZStack(alignment: .topLeading) {
+        ZStack(alignment: .top) {
             ADIBAvatar(
                 type: avatar,
                 iconColor: avatarIconColor,
@@ -153,7 +153,7 @@ public struct ADIBActionListItem: View {
                         RoundedRectangle(cornerRadius: tagRadius)
                             .fill(ADIBColors.Semantic.Success.two)
                     )
-                    .offset(x: -5, y: tagTopOffset)
+                    .offset(y: tagTopOffset)
             }
         }
     }
