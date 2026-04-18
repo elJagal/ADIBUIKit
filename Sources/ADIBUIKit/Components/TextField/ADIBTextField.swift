@@ -101,6 +101,7 @@ public struct ADIBTextField: View {
     private let showPrefixDivider: Bool
     private let onPrefixTap: (() -> Void)?
     private let thumbnailImage: Image?
+    private let showThumbnailDropdown: Bool
     private let showThumbnailDivider: Bool
     private let trailingIcon: Image?
     private let onTrailingIcon: (() -> Void)?
@@ -135,6 +136,7 @@ public struct ADIBTextField: View {
     ///   - showPrefixDivider: Whether to show a vertical divider after the prefix (default `true` when prefix is set).
     ///   - onPrefixTap: Action when the prefix area is tapped.
     ///   - thumbnailImage: Optional circular thumbnail image on the left (24×24).
+    ///   - showThumbnailDropdown: Whether to show a chevron-down next to the thumbnail (default `false`).
     ///   - showThumbnailDivider: Whether to show a vertical divider after the thumbnail (default `true`).
     ///   - trailingIcon: Optional trailing icon on the right side.
     ///   - onTrailingIcon: Action when the trailing icon is tapped.
@@ -151,6 +153,7 @@ public struct ADIBTextField: View {
         showPrefixDivider: Bool = true,
         onPrefixTap: (() -> Void)? = nil,
         thumbnailImage: Image? = nil,
+        showThumbnailDropdown: Bool = false,
         showThumbnailDivider: Bool = true,
         trailingIcon: Image? = nil,
         onTrailingIcon: (() -> Void)? = nil,
@@ -167,6 +170,7 @@ public struct ADIBTextField: View {
         self.showPrefixDivider = showPrefixDivider
         self.onPrefixTap = onPrefixTap
         self.thumbnailImage = thumbnailImage
+        self.showThumbnailDropdown = showThumbnailDropdown
         self.showThumbnailDivider = showThumbnailDivider
         self.trailingIcon = trailingIcon
         self.onTrailingIcon = onTrailingIcon
@@ -306,11 +310,21 @@ public struct ADIBTextField: View {
 
     private func thumbnailView(_ image: Image) -> some View {
         HStack(spacing: prefixContentGap) {
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: thumbnailSize, height: thumbnailSize)
-                .clipShape(Circle())
+            HStack(spacing: prefixChevronGap) {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: thumbnailSize, height: thumbnailSize)
+                    .clipShape(Circle())
+
+                if showThumbnailDropdown {
+                    Image("chevron-down", bundle: .module)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 12, height: 12)
+                        .foregroundStyle(ADIBColors.Inputs.placeholder)
+                }
+            }
 
             if showThumbnailDivider {
                 Rectangle()
@@ -365,8 +379,10 @@ public struct ADIBSelectorField: View {
     private let placeholder: String
     private let value: String?
     private let prefix: String?
+    private let showPrefixDropdown: Bool
     private let showPrefixDivider: Bool
     private let thumbnailImage: Image?
+    private let showThumbnailDropdown: Bool
     private let showThumbnailDivider: Bool
     private let trailingIcon: Image?
     private let helperText: String?
@@ -383,6 +399,7 @@ public struct ADIBSelectorField: View {
     private let prefixContentGap: CGFloat = 12
     private let iconSize: CGFloat = ADIBSizes.Spacing.large
     private let thumbnailSize: CGFloat = ADIBSizes.Spacing.large          // 24
+    private let prefixChevronGap: CGFloat = ADIBSizes.Spacing.xsmall      // 4
 
     // MARK: - Init
 
@@ -392,8 +409,10 @@ public struct ADIBSelectorField: View {
     ///   - placeholder: Placeholder text shown when no value is selected.
     ///   - value: The currently selected value string, or nil.
     ///   - prefix: Optional prefix text.
+    ///   - showPrefixDropdown: Whether to show a chevron-down next to the prefix (default `false`).
     ///   - showPrefixDivider: Whether to show a vertical divider after the prefix.
     ///   - thumbnailImage: Optional circular thumbnail image on the left (24×24).
+    ///   - showThumbnailDropdown: Whether to show a chevron-down next to the thumbnail (default `false`).
     ///   - showThumbnailDivider: Whether to show a vertical divider after the thumbnail (default `true`).
     ///   - trailingIcon: Optional trailing icon (defaults to chevron-right).
     ///   - helperText: Optional helper text below the field.
@@ -405,8 +424,10 @@ public struct ADIBSelectorField: View {
         placeholder: String = "",
         value: String? = nil,
         prefix: String? = nil,
+        showPrefixDropdown: Bool = false,
         showPrefixDivider: Bool = true,
         thumbnailImage: Image? = nil,
+        showThumbnailDropdown: Bool = false,
         showThumbnailDivider: Bool = true,
         trailingIcon: Image? = nil,
         helperText: String? = nil,
@@ -418,8 +439,10 @@ public struct ADIBSelectorField: View {
         self.placeholder = placeholder
         self.value = value
         self.prefix = prefix
+        self.showPrefixDropdown = showPrefixDropdown
         self.showPrefixDivider = showPrefixDivider
         self.thumbnailImage = thumbnailImage
+        self.showThumbnailDropdown = showThumbnailDropdown
         self.showThumbnailDivider = showThumbnailDivider
         self.trailingIcon = trailingIcon
         self.helperText = helperText
@@ -463,8 +486,18 @@ public struct ADIBSelectorField: View {
                     // Prefix
                     if let prefix, !prefix.isEmpty {
                         HStack(spacing: prefixContentGap) {
-                            Text(prefix)
-                                .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Inputs.placeholder)
+                            HStack(spacing: prefixChevronGap) {
+                                Text(prefix)
+                                    .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Inputs.placeholder)
+
+                                if showPrefixDropdown {
+                                    Image("chevron-down", bundle: .module)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 12, height: 12)
+                                        .foregroundStyle(ADIBColors.Inputs.placeholder)
+                                }
+                            }
 
                             if showPrefixDivider {
                                 Rectangle()
@@ -478,11 +511,21 @@ public struct ADIBSelectorField: View {
                     // Thumbnail
                     if let thumbnailImage {
                         HStack(spacing: prefixContentGap) {
-                            thumbnailImage
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: thumbnailSize, height: thumbnailSize)
-                                .clipShape(Circle())
+                            HStack(spacing: prefixChevronGap) {
+                                thumbnailImage
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: thumbnailSize, height: thumbnailSize)
+                                    .clipShape(Circle())
+
+                                if showThumbnailDropdown {
+                                    Image("chevron-down", bundle: .module)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 12, height: 12)
+                                        .foregroundStyle(ADIBColors.Inputs.placeholder)
+                                }
+                            }
 
                             if showThumbnailDivider {
                                 Rectangle()
