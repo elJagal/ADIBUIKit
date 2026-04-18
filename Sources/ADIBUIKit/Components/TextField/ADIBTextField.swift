@@ -276,26 +276,28 @@ public struct ADIBTextField: View {
 
     // MARK: - Prefix View
 
+    @ViewBuilder
     private func prefixView(_ prefix: String) -> some View {
-        HStack(spacing: prefixContentGap) {
-            Button {
-                onPrefixTap?()
-            } label: {
-                HStack(spacing: prefixChevronGap) {
-                    Text(prefix)
-                        .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Inputs.placeholder)
+        let prefixContent = HStack(spacing: prefixChevronGap) {
+            Text(prefix)
+                .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Inputs.placeholder)
 
-                    if showPrefixDropdown {
-                        Image("chevron-down", bundle: .module)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 12, height: 12)
-                            .foregroundStyle(ADIBColors.Inputs.placeholder)
-                    }
-                }
+            if showPrefixDropdown {
+                Image("chevron-down", bundle: .module)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 12, height: 12)
+                    .foregroundStyle(ADIBColors.Inputs.placeholder)
             }
-            .buttonStyle(.plain)
-            .disabled(onPrefixTap == nil)
+        }
+
+        HStack(spacing: prefixContentGap) {
+            if let onPrefixTap {
+                Button(action: onPrefixTap) { prefixContent }
+                    .buttonStyle(.plain)
+            } else {
+                prefixContent
+            }
 
             if showPrefixDivider {
                 Rectangle()
@@ -337,21 +339,23 @@ public struct ADIBTextField: View {
 
     // MARK: - Trailing Icon View
 
+    @ViewBuilder
     private func trailingIconView(_ icon: Image) -> some View {
-        Button {
-            onTrailingIcon?()
-        } label: {
-            icon
-                .renderingMode(.template)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: iconSize, height: iconSize)
-                .foregroundStyle(ADIBColors.Inputs.placeholder)
-                .contentShape(Rectangle())
+        let iconContent = icon
+            .renderingMode(.template)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: iconSize, height: iconSize)
+            .foregroundStyle(ADIBColors.Inputs.placeholder)
+            .contentShape(Rectangle())
+            .padding(.leading, ADIBSizes.Spacing.small)
+
+        if let onTrailingIcon {
+            Button(action: onTrailingIcon) { iconContent }
+                .buttonStyle(.plain)
+        } else {
+            iconContent
         }
-        .buttonStyle(.plain)
-        .disabled(onTrailingIcon == nil)
-        .padding(.leading, ADIBSizes.Spacing.small)
     }
 }
 
