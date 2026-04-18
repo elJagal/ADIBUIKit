@@ -32,6 +32,10 @@ public struct LinkButton: View {
         self.action = action
     }
 
+    // MARK: - Environment
+
+    @Environment(\.isEnabled) private var isEnabled
+
     // MARK: - Body
 
     public var body: some View {
@@ -47,6 +51,7 @@ public struct LinkButton: View {
                 Text(title)
                     .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.interaction)
             }
+            .opacity(isEnabled ? 1.0 : 0.3)
         }
         .buttonStyle(ADIBLinkButtonStyle())
     }
