@@ -2,18 +2,11 @@ import SwiftUI
 
 // MARK: - Banner Style
 
-/// The visual style for the banner background.
+/// The visual style for the banner (info, success, error, warning).
 public enum ADIBBannerStyle {
-    /// Info style — light blue background (`ADIBColors.Banners.Info.background`).
-    case info
-    /// Success style — green background (`ADIBColors.Banners.Success.background`).
-    case success
-    /// Error style — red background (`ADIBColors.Banners.Error.background`).
-    case error
-    /// Warning style — yellow background (`ADIBColors.Banners.Warning.background`).
-    case warning
+    case info, success, error, warning
 
-    /// The background color for this style.
+    /// Background color for the banner body.
     var backgroundColor: Color {
         switch self {
         case .info:    return ADIBColors.Banners.Info.background
@@ -22,66 +15,128 @@ public enum ADIBBannerStyle {
         case .warning: return ADIBColors.Banners.Warning.background
         }
     }
+
+    /// Background color for the button bar.
+    var buttonsBackground: Color {
+        switch self {
+        case .info:    return ADIBColors.Banners.Info.buttons
+        case .success: return ADIBColors.Banners.Success.buttons
+        case .error:   return ADIBColors.Banners.Error.buttons
+        case .warning: return ADIBColors.Banners.Warning.buttons
+        }
+    }
+}
+
+// MARK: - Banner Size
+
+/// The size variant for the banner.
+public enum ADIBBannerSize {
+    /// Icon + title + description + optional button bar.
+    case withButtons
+    /// Icon + title + description (no buttons).
+    case withHeading
+    /// Icon + description only (no title, no buttons).
+    case noHeading
 }
 
 // MARK: - Banner Component
 
-/// A compact banner component from the ADIB design system.
+/// A banner component from the ADIB design system.
 ///
-/// Displays an icon, title, and description in a rounded container.
-/// Commonly used for contextual messages like frequent beneficiaries,
-/// promotions, or status notifications.
+/// Three size variants matching Figma:
 ///
 /// ```swift
+/// // With buttons
 /// ADIBBanner(
-///     icon: Image("timer"),
-///     title: "Frequent beneficiaries",
-///     description: "Easily and quickly transfer to your frequently transferred beneficiaries",
-///     style: .info
-/// ) {
-///     print("Banner tapped")
-/// }
+///     size: .withButtons,
+///     icon: Image("info"),
+///     title: "Headline here",
+///     description: "You can add no more than three lines of content.",
+///     style: .info,
+///     primaryButtonTitle: "Continue",
+///     secondaryButtonTitle: "Get help",
+///     onPrimaryButton: { },
+///     onSecondaryButton: { }
+/// )
+///
+/// // With heading (no buttons)
+/// ADIBBanner(
+///     size: .withHeading,
+///     icon: Image("info"),
+///     title: "Headline here",
+///     description: "You can add no more than three lines of content.",
+///     style: .success
+/// )
+///
+/// // No heading (description only)
+/// ADIBBanner(
+///     size: .noHeading,
+///     icon: Image("info"),
+///     description: "You can add no more than three lines of content.",
+///     style: .warning
+/// )
 /// ```
 public struct ADIBBanner: View {
 
     // MARK: - Properties
 
+    private let size: ADIBBannerSize
     private let icon: Image
-    private let title: String
+    private let title: String?
     private let description: String
     private let style: ADIBBannerStyle
+    private let primaryButtonTitle: String?
+    private let secondaryButtonTitle: String?
+    private let onPrimaryButton: (() -> Void)?
+    private let onSecondaryButton: (() -> Void)?
     private let onTap: (() -> Void)?
 
     // MARK: - Constants
 
-    private let containerPadding: CGFloat = ADIBSizes.Spacing.small          // 8
-    private let containerRadius: CGFloat = ADIBSizes.Radius.medium           // 16
-    private let iconBoxSize: CGFloat = 60
-    private let iconSize: CGFloat = 32
-    private let iconBoxRadius: CGFloat = ADIBSizes.Radius.small              // 12
-    private let contentGap: CGFloat = 12
-    private let textGap: CGFloat = ADIBSizes.Spacing.xxsmall                 // 2
+    private let containerRadius: CGFloat = ADIBSizes.Radius.small              // 12
+    private let iconSize: CGFloat = ADIBSizes.Spacing.large                    // 24
+    private let iconTextGap: CGFloat = 12
+    private let contentTopPadding: CGFloat = ADIBSizes.Spacing.medium          // 16
+    private let noHeadingPadding: CGFloat = 12
+    private let contentBottomGap: CGFloat = ADIBSizes.Spacing.medium           // 16
+    private let buttonBarHeight: CGFloat = 48
+    private let buttonDividerColor: Color = Color.black.opacity(0.06)
 
     // MARK: - Init
 
     /// Creates a banner component.
     /// - Parameters:
-    ///   - icon: The leading icon image.
-    ///   - title: The bold title text.
-    ///   - description: The secondary description text.
+    ///   - size: The banner size variant (default `.withHeading`).
+    ///   - icon: The leading icon image (24×24).
+    ///   - title: The bold title text (used in `.withButtons` and `.withHeading`).
+    ///   - description: The description text.
     ///   - style: The banner visual style (default `.info`).
-    ///   - onTap: An optional tap action.
+    ///   - primaryButtonTitle: The primary (right) button title. Used in `.withButtons`.
+    ///   - secondaryButtonTitle: The secondary (left) button title. Used in `.withButtons`.
+    ///   - onPrimaryButton: Action for the primary button.
+    ///   - onSecondaryButton: Action for the secondary button.
+    ///   - onTap: Optional tap action for the entire banner (non-button variants).
     public init(
+        size: ADIBBannerSize = .withHeading,
         icon: Image,
-        title: String,
+        title: String? = nil,
         description: String,
         style: ADIBBannerStyle = .info,
+        primaryButtonTitle: String? = nil,
+        secondaryButtonTitle: String? = nil,
+        onPrimaryButton: (() -> Void)? = nil,
+        onSecondaryButton: (() -> Void)? = nil,
         onTap: (() -> Void)? = nil
     ) {
+        self.size = size
         self.icon = icon
         self.title = title
         self.description = description
         self.style = style
+        self.primaryButtonTitle = primaryButtonTitle
+        self.secondaryButtonTitle = secondaryButtonTitle
+        self.onPrimaryButton = onPrimaryButton
+        self.onSecondaryButton = onSecondaryButton
         self.onTap = onTap
     }
 
@@ -89,46 +144,90 @@ public struct ADIBBanner: View {
 
     public var body: some View {
         Group {
-            if let onTap {
-                Button(action: onTap) {
-                    content
-                }
-                .buttonStyle(.plain)
+            if let onTap, size != .withButtons {
+                Button(action: onTap) { bannerContent }
+                    .buttonStyle(.plain)
             } else {
-                content
+                bannerContent
             }
         }
     }
 
-    private var content: some View {
-        HStack(spacing: contentGap) {
-            // Icon box
-            icon
-                .renderingMode(.template)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: iconSize, height: iconSize)
-                .foregroundStyle(ADIBColors.Segment.accent)
-                .frame(width: iconBoxSize, height: iconBoxSize)
-                .background(
-                    RoundedRectangle(cornerRadius: iconBoxRadius)
-                        .fill(Color.clear)
-                )
+    @ViewBuilder
+    private var bannerContent: some View {
+        switch size {
+        case .withButtons:
+            withButtonsLayout
+        case .withHeading:
+            withHeadingLayout
+        case .noHeading:
+            noHeadingLayout
+        }
+    }
 
-            // Text content
-            VStack(alignment: .leading, spacing: textGap) {
-                Text(title)
-                    .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
-                    .lineLimit(1)
+    // =========================================================================
+    // MARK: - With Buttons Layout
+    // =========================================================================
 
+    /// Icon + title + description, then a full-width button bar
+    private var withButtonsLayout: some View {
+        VStack(spacing: contentBottomGap) {
+            // Content area
+            VStack(alignment: .leading, spacing: 0) {
+                // Icon + Title row
+                if let title, !title.isEmpty {
+                    HStack(alignment: .top, spacing: iconTextGap) {
+                        iconView
+                        Text(title)
+                            .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+
+                // Description — indented to align with title text
                 Text(description)
                     .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
-                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, iconSize + iconTextGap)
+            }
+            .padding(.horizontal, contentTopPadding)
+
+            // Button bar
+            buttonBar
+        }
+        .padding(.top, contentTopPadding)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: containerRadius)
+                .fill(style.backgroundColor)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: containerRadius))
+    }
+
+    // =========================================================================
+    // MARK: - With Heading Layout
+    // =========================================================================
+
+    /// Icon + title + description, no buttons
+    private var withHeadingLayout: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // Icon + Title row
+            if let title, !title.isEmpty {
+                HStack(alignment: .top, spacing: iconTextGap) {
+                    iconView
+                    Text(title)
+                        .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
 
-            Spacer(minLength: 0)
+            // Description — indented to align with title
+            Text(description)
+                .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, iconSize + iconTextGap)
         }
-        .padding(containerPadding)
+        .padding(contentTopPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: containerRadius)
@@ -136,42 +235,224 @@ public struct ADIBBanner: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: containerRadius))
     }
+
+    // =========================================================================
+    // MARK: - No Heading Layout
+    // =========================================================================
+
+    /// Icon + description only
+    private var noHeadingLayout: some View {
+        HStack(alignment: .top, spacing: iconTextGap) {
+            iconView
+
+            Text(description)
+                .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(noHeadingPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: containerRadius)
+                .fill(style.backgroundColor)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: containerRadius))
+    }
+
+    // =========================================================================
+    // MARK: - Shared Sub-Views
+    // =========================================================================
+
+    /// The 24×24 icon view.
+    private var iconView: some View {
+        icon
+            .renderingMode(.template)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: iconSize, height: iconSize)
+            .foregroundStyle(ADIBColors.Text.base)
+    }
+
+    /// The button bar with 1 or 2 CTAs.
+    private var buttonBar: some View {
+        HStack(spacing: 0) {
+            // Secondary button (left)
+            if let secondaryButtonTitle, !secondaryButtonTitle.isEmpty {
+                Button {
+                    onSecondaryButton?()
+                } label: {
+                    Text(secondaryButtonTitle)
+                        .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.base)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: buttonBarHeight)
+                }
+                .buttonStyle(.plain)
+
+                // Divider between buttons
+                Rectangle()
+                    .fill(buttonDividerColor)
+                    .frame(width: 1, height: buttonBarHeight)
+            }
+
+            // Primary button (right)
+            if let primaryButtonTitle, !primaryButtonTitle.isEmpty {
+                Button {
+                    onPrimaryButton?()
+                } label: {
+                    Text(primaryButtonTitle)
+                        .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.base)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: buttonBarHeight)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .background(style.buttonsBackground)
+    }
 }
 
-// MARK: - Preview
+// MARK: - Previews
 
 #if DEBUG
-#Preview("Banner") {
+#Preview("With Buttons — All Styles") {
+    ScrollView {
+        VStack(spacing: ADIBSizes.Spacing.medium) {
+            ADIBBanner(
+                size: .withButtons,
+                icon: Image(systemName: "info.circle.fill"),
+                title: "Headline here",
+                description: "You can add no more than three lines of content in this banner.",
+                style: .info,
+                primaryButtonTitle: "Continue",
+                secondaryButtonTitle: "Get help",
+                onPrimaryButton: { print("Continue") },
+                onSecondaryButton: { print("Get help") }
+            )
+
+            ADIBBanner(
+                size: .withButtons,
+                icon: Image(systemName: "checkmark.circle.fill"),
+                title: "Headline here",
+                description: "You can add no more than three lines of content in this banner.",
+                style: .success,
+                primaryButtonTitle: "Continue",
+                secondaryButtonTitle: "Get help",
+                onPrimaryButton: { print("Continue") },
+                onSecondaryButton: { print("Get help") }
+            )
+
+            ADIBBanner(
+                size: .withButtons,
+                icon: Image(systemName: "xmark.circle.fill"),
+                title: "Headline here",
+                description: "You can add no more than three lines of content in this banner.",
+                style: .error,
+                primaryButtonTitle: "Continue",
+                secondaryButtonTitle: "Get help",
+                onPrimaryButton: { print("Continue") },
+                onSecondaryButton: { print("Get help") }
+            )
+
+            ADIBBanner(
+                size: .withButtons,
+                icon: Image(systemName: "exclamationmark.triangle.fill"),
+                title: "Headline here",
+                description: "You can add no more than three lines of content in this banner.",
+                style: .warning,
+                primaryButtonTitle: "Continue",
+                secondaryButtonTitle: "Get help",
+                onPrimaryButton: { print("Continue") },
+                onSecondaryButton: { print("Get help") }
+            )
+        }
+        .padding(.horizontal, ADIBSizes.Spacing.medium)
+        .padding(.vertical, ADIBSizes.Spacing.large)
+    }
+    .background(ADIBColors.background)
+}
+
+#Preview("With Heading — All Styles") {
     VStack(spacing: ADIBSizes.Spacing.medium) {
         ADIBBanner(
-            icon: Image(systemName: "clock.fill"),
-            title: "Frequent beneficiaries",
-            description: "Easily and quickly transfer to your frequently transferred beneficiaries",
+            size: .withHeading,
+            icon: Image(systemName: "info.circle.fill"),
+            title: "Headline here",
+            description: "You can add no more than three lines of content in this banner.",
             style: .info
         )
 
         ADIBBanner(
+            size: .withHeading,
             icon: Image(systemName: "checkmark.circle.fill"),
-            title: "Transfer successful",
-            description: "Your transfer has been completed successfully",
+            title: "Headline here",
+            description: "You can add no more than three lines of content in this banner.",
             style: .success
         )
 
         ADIBBanner(
-            icon: Image(systemName: "exclamationmark.triangle.fill"),
-            title: "Action required",
-            description: "Please verify your identity to continue",
-            style: .warning
+            size: .withHeading,
+            icon: Image(systemName: "xmark.circle.fill"),
+            title: "Headline here",
+            description: "You can add no more than three lines of content in this banner.",
+            style: .error
         )
 
         ADIBBanner(
-            icon: Image(systemName: "xmark.circle.fill"),
-            title: "Transfer failed",
-            description: "Something went wrong, please try again",
-            style: .error
+            size: .withHeading,
+            icon: Image(systemName: "exclamationmark.triangle.fill"),
+            title: "Headline here",
+            description: "You can add no more than three lines of content in this banner.",
+            style: .warning
         )
     }
-    .padding()
+    .padding(.horizontal, ADIBSizes.Spacing.medium)
+    .background(ADIBColors.background)
+}
+
+#Preview("No Heading — All Styles") {
+    VStack(spacing: ADIBSizes.Spacing.medium) {
+        ADIBBanner(
+            size: .noHeading,
+            icon: Image(systemName: "info.circle.fill"),
+            description: "You can add no more than three lines of content in this banner.",
+            style: .info
+        )
+
+        ADIBBanner(
+            size: .noHeading,
+            icon: Image(systemName: "checkmark.circle.fill"),
+            description: "You can add no more than three lines of content in this banner.",
+            style: .success
+        )
+
+        ADIBBanner(
+            size: .noHeading,
+            icon: Image(systemName: "xmark.circle.fill"),
+            description: "You can add no more than three lines of content in this banner.",
+            style: .error
+        )
+
+        ADIBBanner(
+            size: .noHeading,
+            icon: Image(systemName: "exclamationmark.triangle.fill"),
+            description: "You can add no more than three lines of content in this banner.",
+            style: .warning
+        )
+    }
+    .padding(.horizontal, ADIBSizes.Spacing.medium)
+    .background(ADIBColors.background)
+}
+
+#Preview("Single Button") {
+    ADIBBanner(
+        size: .withButtons,
+        icon: Image(systemName: "info.circle.fill"),
+        title: "Headline here",
+        description: "You can add no more than three lines of content in this banner.",
+        style: .info,
+        primaryButtonTitle: "Continue",
+        onPrimaryButton: { print("Continue") }
+    )
+    .padding(.horizontal, ADIBSizes.Spacing.medium)
     .background(ADIBColors.background)
 }
 #endif

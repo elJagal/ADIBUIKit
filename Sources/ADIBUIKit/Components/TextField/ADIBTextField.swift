@@ -260,7 +260,7 @@ public struct ADIBTextField: View {
                         .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Inputs.placeholder)
 
                     if showPrefixDropdown {
-                        Image(systemName: "chevron.down")
+                        Image("chevron-down", bundle: .module)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 12, height: 12)

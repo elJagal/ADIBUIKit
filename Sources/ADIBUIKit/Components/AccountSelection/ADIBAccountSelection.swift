@@ -349,7 +349,7 @@ public struct ADIBAccountSelection: View {
             Spacer(minLength: 0)
 
             if showTrailingIcon {
-                (trailingIcon ?? Image(systemName: "chevron.down"))
+                (trailingIcon ?? Image("chevron-down", bundle: .module))
                     .renderingMode(.template)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
