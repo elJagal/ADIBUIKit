@@ -33,7 +33,7 @@ public struct ADIBRadioButton: View {
 
     private let circleSize: CGFloat = 24
     private let borderWidth: CGFloat = 2
-    private let innerDotSize: CGFloat = 12
+    private let checkmarkSize: CGFloat = 12
     private let gap: CGFloat = 12
 
     // MARK: - Init
@@ -90,18 +90,20 @@ public struct ADIBRadioButton: View {
 
     private var radioCircle: some View {
         ZStack {
-            Circle()
-                .stroke(
-                    isSelected ? ADIBColors.Brand.Primary.one : ADIBColors.Text.subdued,
-                    lineWidth: borderWidth
-                )
-                .frame(width: circleSize, height: circleSize)
-
             if isSelected {
                 Circle()
-                    .fill(ADIBColors.Brand.Primary.one)
-                    .frame(width: innerDotSize, height: innerDotSize)
+                    .fill(ADIBColors.interaction)
+                    .frame(width: circleSize, height: circleSize)
+                    .overlay(
+                        Image(systemName: "checkmark")
+                            .font(.system(size: checkmarkSize, weight: .bold))
+                            .foregroundStyle(ADIBColors.Text.white)
+                    )
                     .transition(.scale)
+            } else {
+                Circle()
+                    .stroke(ADIBColors.Text.subdued, lineWidth: borderWidth)
+                    .frame(width: circleSize, height: circleSize)
             }
         }
         .frame(width: circleSize, height: circleSize)
