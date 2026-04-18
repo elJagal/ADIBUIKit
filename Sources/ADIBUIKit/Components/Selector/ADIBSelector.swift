@@ -145,13 +145,12 @@ public struct ADIBSelectorGrid: View {
             if options.count > 2 {
                 HStack(spacing: horizontalGap) {
                     ForEach(Array(options.dropFirst(2).enumerated()), id: \.offset) { offset, label in
-                        let index = offset + 2
                         ADIBSelector(
                             label: label,
-                            isSelected: selection == index
+                            isSelected: selection == offset + 2
                         ) {
                             withAnimation(.easeInOut(duration: 0.2)) {
-                                selection = index
+                                selection = offset + 2
                             }
                         }
                     }
