@@ -101,22 +101,23 @@ public struct ADIBPageHeader: View {
     private let showTrailingIcon: Bool
     private let onTrailingIcon: (() -> Void)?
 
+    // MARK: - Shared Constants
+
+    private let horizontalPadding: CGFloat = ADIBSizes.Spacing.medium      // 16
+    private let backIconSize: CGFloat = ADIBSizes.Spacing.large            // 24
+
     // MARK: - Large Constants
 
-    private let contentWidth: CGFloat = 335
-    private let navigationWidth: CGFloat = 344
     private let sectionGap: CGFloat = 10
     private let headingDescriptionGap: CGFloat = ADIBSizes.Spacing.small   // 8
     private let progressBarHeight: CGFloat = 4
     private let progressBarRadius: CGFloat = 19
-    private let backIconSize: CGFloat = ADIBSizes.Spacing.large            // 24
     private let navRowHeight: CGFloat = 40
     private let stepBadgeSize: CGFloat = 40
 
     // MARK: - Compact Constants
 
     private let compactBarHeight: CGFloat = 44
-    private let compactHorizontalPadding: CGFloat = 15.5
     private let compactIconSize: CGFloat = ADIBSizes.Spacing.large         // 24
 
     // MARK: - Init
@@ -212,8 +213,8 @@ public struct ADIBPageHeader: View {
             }
             headingBlock
         }
+        .padding(.horizontal, horizontalPadding)
         .frame(maxWidth: .infinity)
-        .background(ADIBColors.background)
     }
 
     // MARK: - Progress Bar
@@ -242,7 +243,8 @@ public struct ADIBPageHeader: View {
             }
             .frame(height: progressBarHeight)
         }
-        .frame(width: contentWidth, height: progressBarHeight)
+        .frame(maxWidth: .infinity)
+        .frame(height: progressBarHeight)
     }
 
     // MARK: - Large Navigation Row
@@ -265,7 +267,7 @@ public struct ADIBPageHeader: View {
                 stepCounter
             }
         }
-        .frame(width: navigationWidth)
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Step Counter
@@ -295,7 +297,7 @@ public struct ADIBPageHeader: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .frame(width: contentWidth)
+        .frame(maxWidth: .infinity)
     }
 
     // =========================================================================
@@ -330,12 +332,8 @@ public struct ADIBPageHeader: View {
             compactTrailingContent
         }
         .frame(height: compactBarHeight)
-        .padding(.horizontal, compactHorizontalPadding)
+        .padding(.horizontal, horizontalPadding)
         .frame(maxWidth: .infinity)
-        .background(
-            ADIBColors.background
-                .blur(radius: 8)
-        )
     }
 
     // MARK: - Compact Center Content
