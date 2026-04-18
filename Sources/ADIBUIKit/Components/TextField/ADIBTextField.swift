@@ -1,5 +1,25 @@
 import SwiftUI
 
+#if canImport(UIKit)
+import UIKit
+#else
+/// Placeholder for macOS builds where UIKeyboardType does not exist.
+public enum UIKeyboardType: Int {
+    case `default` = 0
+    case asciiCapable = 1
+    case numbersAndPunctuation = 2
+    case URL = 3
+    case numberPad = 4
+    case phonePad = 5
+    case namePhonePad = 6
+    case emailAddress = 7
+    case decimalPad = 8
+    case twitter = 9
+    case webSearch = 10
+    case asciiCapableNumberPad = 11
+}
+#endif
+
 // MARK: - Text Field State
 
 /// The visual state of the text field.
@@ -165,7 +185,14 @@ public struct ADIBTextField: View {
     }
 
     private var helperTextColor: Color {
-        isError ? ADIBColors.Semantic.Error.two : ADIBColors.Text.subdued
+        switch currentState {
+        case .error:
+            return ADIBColors.Semantic.Error.two
+        case .filled, .active:
+            return ADIBColors.Text.subdued
+        default:
+            return ADIBColors.Inputs.placeholder
+        }
     }
 
     // MARK: - Body
@@ -190,7 +217,9 @@ public struct ADIBTextField: View {
                 // Text input
                 TextField(placeholder, text: $text)
                     .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.base)
+                    #if canImport(UIKit)
                     .keyboardType(keyboardType)
+                    #endif
                     .focused($isFocused)
                     .disabled(isDisabled)
 
@@ -349,8 +378,15 @@ public struct ADIBSelectorField: View {
         self.onTap = onTap
     }
 
+    private var hasValue: Bool {
+        if let value, !value.isEmpty { return true }
+        return false
+    }
+
     private var helperTextColor: Color {
-        isError ? ADIBColors.Semantic.Error.two : ADIBColors.Text.subdued
+        if isError { return ADIBColors.Semantic.Error.two }
+        if hasValue { return ADIBColors.Text.subdued }
+        return ADIBColors.Inputs.placeholder
     }
 
     private var borderColor: Color {
