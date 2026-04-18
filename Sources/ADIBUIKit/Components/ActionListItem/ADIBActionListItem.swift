@@ -48,7 +48,8 @@ public struct ADIBActionListItem: View {
     private let contentGap: CGFloat = ADIBSizes.Spacing.medium          // 16
     private let separatorGap: CGFloat = ADIBSizes.Spacing.medium        // 16
     private let trailingIconSize: CGFloat = ADIBSizes.Spacing.large     // 24
-    private let separatorWidth: CGFloat = 271
+    private let avatarSize: CGFloat = 48
+    private let separatorLeading: CGFloat = 64                          // avatar(48) + gap(16)
     private let tagRadius: CGFloat = 6
     private let tagHorizontalPadding: CGFloat = 6
     private let tagVerticalPadding: CGFloat = 1
@@ -122,12 +123,13 @@ public struct ADIBActionListItem: View {
                         .foregroundStyle(ADIBColors.Text.subdued)
                 }
 
-                // Separator line
+                // Separator line — starts aligned with the text (after avatar + gap)
                 if showSeparator {
                     Rectangle()
                         .fill(ADIBColors.border)
-                        .frame(width: separatorWidth, height: 0.5)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .frame(height: 0.5)
+                        .frame(maxWidth: .infinity)
+                        .padding(.leading, separatorLeading)
                 }
             }
         }

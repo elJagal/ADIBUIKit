@@ -270,7 +270,7 @@ public struct ADIBAccountSelection: View {
             // Separator line
             Rectangle()
                 .fill(ADIBColors.border)
-                .frame(height: 1)
+                .frame(height: 0.5)
                 .frame(maxWidth: .infinity)
 
             // Amount label + amount
@@ -354,7 +354,7 @@ public struct ADIBAccountSelection: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: iconSize, height: iconSize)
-                    .foregroundStyle(ADIBColors.Text.base)
+                    .foregroundStyle(ADIBColors.Inputs.placeholder)
             }
         }
     }
