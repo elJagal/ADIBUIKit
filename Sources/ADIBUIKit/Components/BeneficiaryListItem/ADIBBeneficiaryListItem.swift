@@ -98,7 +98,7 @@ public struct ADIBBeneficiaryListItem: View {
                 .clipShape(Circle())
 
             // Text content + divider
-            VStack(alignment: .leading, spacing: dividerTopPadding) {
+            VStack(alignment: .leading, spacing: 0) {
                 // Info block
                 VStack(alignment: .leading, spacing: textBlockGap) {
                     // Name row with more button
@@ -153,9 +153,11 @@ public struct ADIBBeneficiaryListItem: View {
                     Rectangle()
                         .fill(ADIBColors.border)
                         .frame(height: 1)
+                        .padding(.top, dividerTopPadding)
                 }
             }
         }
+        .padding(.top, dividerTopPadding)
     }
 }
 
