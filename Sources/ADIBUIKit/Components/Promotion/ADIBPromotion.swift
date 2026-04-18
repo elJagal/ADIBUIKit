@@ -50,16 +50,16 @@ public struct ADIBPromotion: View {
 
     // MARK: - Constants (Large)
 
-    private let largeContainerHeight: CGFloat = 150
+    private let largeContainerHeight: CGFloat = 157
     private let largeContainerRadius: CGFloat = ADIBSizes.Radius.medium         // 16
-    private let largeInnerHeight: CGFloat = 108
+    private let largeInnerHeight: CGFloat = 115                                 // 108 + 7 (extra bottom padding)
     private let largeInnerRadius: CGFloat = 10
     private let largeHeadingLeading: CGFloat = 20
     private let largeHeadingTop: CGFloat = 20
     private let largeHeadingWidth: CGFloat = 188
     private let largeImageWidth: CGFloat = 127
     private let largeImageLeading: CGFloat = 208
-    private let largeCTATop: CGFloat = 120
+    private let largeCTATop: CGFloat = 127                                      // 120 + 7
 
     // MARK: - Constants (Small)
 
