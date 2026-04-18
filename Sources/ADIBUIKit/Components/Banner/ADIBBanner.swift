@@ -25,6 +25,16 @@ public enum ADIBBannerStyle {
         case .warning: return ADIBColors.Banners.Warning.buttons
         }
     }
+
+    /// Icon tint color for the banner style.
+    var iconColor: Color {
+        switch self {
+        case .info:    return ADIBColors.Semantic.Info.two
+        case .success: return ADIBColors.Semantic.Success.two
+        case .error:   return ADIBColors.Semantic.Error.two
+        case .warning: return ADIBColors.Semantic.Warning.two
+        }
+    }
 }
 
 // MARK: - Banner Size
@@ -262,14 +272,14 @@ public struct ADIBBanner: View {
     // MARK: - Shared Sub-Views
     // =========================================================================
 
-    /// The 24×24 icon view.
+    /// The 24×24 icon view, tinted with the style's semantic color.
     private var iconView: some View {
         icon
             .renderingMode(.template)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: iconSize, height: iconSize)
-            .foregroundStyle(ADIBColors.Text.base)
+            .foregroundStyle(style.iconColor)
     }
 
     /// The button bar with 1 or 2 CTAs.
