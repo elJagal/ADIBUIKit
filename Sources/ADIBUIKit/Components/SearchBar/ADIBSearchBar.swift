@@ -81,12 +81,18 @@ public struct ADIBSearchBar: View {
                     .foregroundStyle(ADIBColors.Inputs.placeholder)
 
                 // Text field
-                TextField(placeholder, text: $text)
-                    .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.base)
-                    .focused($isFocused)
-                    #if canImport(UIKit)
-                    .autocorrectionDisabled()
-                    #endif
+                ZStack(alignment: .leading) {
+                    if text.isEmpty {
+                        Text(placeholder)
+                            .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Inputs.placeholder)
+                    }
+                    TextField("", text: $text)
+                        .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.base)
+                        .focused($isFocused)
+                        #if canImport(UIKit)
+                        .autocorrectionDisabled()
+                        #endif
+                }
             }
             .padding(.horizontal, iconLeading)
             .frame(height: barHeight)
