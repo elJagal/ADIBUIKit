@@ -257,10 +257,11 @@ public struct ADIBBanner: View {
 
             Text(description)
                 .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(noHeadingPadding)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: containerRadius)
                 .fill(style.backgroundColor)
