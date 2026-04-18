@@ -117,52 +117,47 @@ public struct ADIBPromotion: View {
     // MARK: - Large Layout
     // =========================================================================
 
-    /// Heading + product image on a card, call-to-action text below.
+    /// Heading + product image overlapping card, call-to-action text below.
     private var largeLayout: some View {
-        ZStack(alignment: .top) {
+        ZStack(alignment: .topLeading) {
             // Outer container background
             RoundedRectangle(cornerRadius: largeContainerRadius)
                 .fill(ADIBColors.Surface.blueOne)
-                .frame(height: largeContainerHeight)
 
-            VStack(spacing: 0) {
-                // Inner card with heading + image
-                ZStack(alignment: .topLeading) {
-                    // Inner card background
-                    RoundedRectangle(cornerRadius: largeInnerRadius)
-                        .fill(ADIBColors.Segment.Mass.two)
-                        .frame(height: largeInnerHeight)
-
-                    // Heading — left side
-                    Text(heading)
-                        .adibTextStyle(ADIBTypography.h4.semibold, color: ADIBColors.Text.base)
-                        .frame(width: largeHeadingWidth, alignment: .leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.leading, largeHeadingLeading)
-                        .padding(.top, largeHeadingTop)
-
-                    // Product image — right side
-                    HStack {
-                        Spacer()
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: largeImageSize, height: largeImageSize)
-                            .clipped()
-                            .padding(.trailing, largeImageTrailing)
-                            .padding(.top, largeImageTop)
-                    }
-                }
+            // Inner card background (heading sits inside this)
+            RoundedRectangle(cornerRadius: largeInnerRadius)
+                .fill(ADIBColors.Segment.Mass.two)
                 .frame(height: largeInnerHeight)
-                .clipShape(RoundedRectangle(cornerRadius: largeInnerRadius))
 
-                // Call to action text — centered below inner card
-                if let callToAction, !callToAction.isEmpty {
+            // Heading — positioned inside inner card, left side
+            Text(heading)
+                .adibTextStyle(ADIBTypography.h4.semibold, color: ADIBColors.Text.base)
+                .frame(width: largeHeadingWidth, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.leading, largeHeadingLeading)
+                .padding(.top, largeHeadingTop)
+
+            // Product image — overlaps inner card, extends into outer area
+            HStack {
+                Spacer()
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: largeImageSize, height: largeImageSize)
+                    .clipped()
+                    .padding(.trailing, largeImageTrailing)
+            }
+            .padding(.top, largeImageTop)
+
+            // Call to action text — centred at bottom
+            if let callToAction, !callToAction.isEmpty {
+                VStack {
+                    Spacer()
                     Text(callToAction)
                         .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
-                        .frame(height: largeContainerHeight - largeInnerHeight)
+                        .padding(.bottom, (largeContainerHeight - largeCTATop - 18) / 2) // centre in bottom strip
                 }
             }
         }
