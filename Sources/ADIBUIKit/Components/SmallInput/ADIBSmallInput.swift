@@ -80,43 +80,39 @@ public struct ADIBSmallInput: View {
     // MARK: - Body
 
     public var body: some View {
-        Button {
-            onTap?()
-        } label: {
-            VStack(alignment: .leading, spacing: contentGap) {
-                // Heading
-                Text(heading)
-                    .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
-                    .lineLimit(1)
+        let content = cardContent
 
-                // Amount row
-                HStack(spacing: amountRowGap) {
-                    // Flag image
-                    if showFlag, let flagImage {
-                        flagImage
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: flagSize, height: flagSize)
-                            .clipShape(RoundedRectangle(cornerRadius: flagRadius))
-                    }
-
-                    // Amount text
-                    Text(amount)
-                        .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
-                        .lineLimit(1)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, horizontalPadding)
-            .padding(.vertical, verticalPadding)
-            .background(
-                RoundedRectangle(cornerRadius: containerRadius)
-                    .fill(ADIBColors.Segment.Mass.two)
-            )
+        if let onTap {
+            Button(action: onTap) { content }
+                .buttonStyle(.plain)
+                .disabled(isDisabled)
+                .opacity(isDisabled ? 0.2 : 1.0)
+        } else {
+            content
         }
-        .buttonStyle(.plain)
-        .disabled(isDisabled || onTap == nil)
-        .opacity(isDisabled ? 0.2 : 1.0)
+    }
+
+    // MARK: - Card Content
+
+    private var cardContent: some View {
+        VStack(alignment: .leading, spacing: contentGap) {
+            // Heading
+            Text(heading)
+                .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
+                .lineLimit(1)
+
+            // Amount text
+            Text(amount)
+                .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, horizontalPadding)
+        .padding(.vertical, verticalPadding)
+        .background(
+            RoundedRectangle(cornerRadius: containerRadius)
+                .fill(ADIBColors.Segment.Mass.two)
+        )
     }
 }
 
