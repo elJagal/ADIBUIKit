@@ -123,7 +123,7 @@ public struct ADIBBeneficiaryListItem: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: moreIconSize, height: moreIconSize)
-                                    .foregroundStyle(ADIBColors.Text.subdued)
+                                    .foregroundStyle(ADIBColors.interaction)
                                     .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
