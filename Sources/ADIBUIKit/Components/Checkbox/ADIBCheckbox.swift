@@ -91,16 +91,9 @@ public struct ADIBCheckbox: View {
 
     private var checkboxView: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: boxRadius)
-                .stroke(
-                    isChecked ? ADIBColors.Brand.Primary.one : ADIBColors.Text.subdued,
-                    lineWidth: borderWidth
-                )
-                .frame(width: boxSize, height: boxSize)
-
             if isChecked {
                 RoundedRectangle(cornerRadius: boxRadius)
-                    .fill(ADIBColors.Brand.Primary.one)
+                    .fill(ADIBColors.interaction)
                     .frame(width: boxSize, height: boxSize)
                     .overlay(
                         Image(systemName: "checkmark")
@@ -108,6 +101,10 @@ public struct ADIBCheckbox: View {
                             .foregroundStyle(ADIBColors.Text.white)
                     )
                     .transition(.scale)
+            } else {
+                RoundedRectangle(cornerRadius: boxRadius)
+                    .stroke(ADIBColors.Text.subdued, lineWidth: borderWidth)
+                    .frame(width: boxSize, height: boxSize)
             }
         }
         .frame(width: boxSize, height: boxSize)
