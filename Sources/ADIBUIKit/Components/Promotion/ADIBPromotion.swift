@@ -57,9 +57,8 @@ public struct ADIBPromotion: View {
     private let largeHeadingLeading: CGFloat = 20
     private let largeHeadingTop: CGFloat = 20
     private let largeHeadingWidth: CGFloat = 188
-    private let largeImageSize: CGFloat = 115
-    private let largeImageTrailing: CGFloat = 12                                // 335 - 208 - 115 = 12
-    private let largeImageTop: CGFloat = 14
+    private let largeImageWidth: CGFloat = 127
+    private let largeImageLeading: CGFloat = 208
     private let largeCTATop: CGFloat = 120
 
     // MARK: - Constants (Small)
@@ -117,48 +116,50 @@ public struct ADIBPromotion: View {
     // MARK: - Large Layout
     // =========================================================================
 
-    /// Heading + product image overlapping card, call-to-action text below.
+    /// Inner card (heading + image clipped), CTA text in bottom strip.
     private var largeLayout: some View {
         ZStack(alignment: .topLeading) {
             // Outer container background
             RoundedRectangle(cornerRadius: largeContainerRadius)
                 .fill(ADIBColors.Surface.blueOne)
 
-            // Inner card background (heading sits inside this)
-            RoundedRectangle(cornerRadius: largeInnerRadius)
-                .fill(ADIBColors.Segment.Mass.two)
-                .frame(height: largeInnerHeight)
+            // Inner card — heading left, image right, overflow clipped
+            ZStack(alignment: .topLeading) {
+                // Inner card background
+                RoundedRectangle(cornerRadius: largeInnerRadius)
+                    .fill(ADIBColors.Segment.Mass.two)
 
-            // Heading — positioned inside inner card, left side
-            Text(heading)
-                .adibTextStyle(ADIBTypography.h4.semibold, color: ADIBColors.Text.base)
-                .frame(width: largeHeadingWidth, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.leading, largeHeadingLeading)
-                .padding(.top, largeHeadingTop)
+                // Heading — left side
+                Text(heading)
+                    .adibTextStyle(ADIBTypography.h4.semibold, color: ADIBColors.Text.base)
+                    .frame(width: largeHeadingWidth, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.leading, largeHeadingLeading)
+                    .padding(.top, largeHeadingTop)
 
-            // Product image — overlaps inner card, extends into outer area
-            HStack {
-                Spacer()
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: largeImageSize, height: largeImageSize)
-                    .clipped()
-                    .padding(.trailing, largeImageTrailing)
-            }
-            .padding(.top, largeImageTop)
-
-            // Call to action text — centred at bottom
-            if let callToAction, !callToAction.isEmpty {
-                VStack {
-                    Spacer()
-                    Text(callToAction)
-                        .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-                        .padding(.bottom, (largeContainerHeight - largeCTATop - 18) / 2) // centre in bottom strip
+                // Product image — right side, clipped to inner card
+                GeometryReader { geo in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: largeImageWidth, height: largeInnerHeight)
+                        .clipped()
+                        .position(
+                            x: largeImageLeading + largeImageWidth / 2,
+                            y: largeInnerHeight / 2
+                        )
                 }
+            }
+            .frame(height: largeInnerHeight)
+            .clipShape(RoundedRectangle(cornerRadius: largeInnerRadius))
+
+            // Call to action text — centred in bottom strip
+            if let callToAction, !callToAction.isEmpty {
+                Text(callToAction)
+                    .adibTextStyle(ADIBTypography.caption.regular, color: ADIBColors.Text.base)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, largeCTATop)
             }
         }
         .frame(maxWidth: .infinity)
