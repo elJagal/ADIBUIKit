@@ -113,12 +113,12 @@ public struct ADIBTransferListItem: View {
                             .lineLimit(1)
 
                         // Trailing chevron
-                        (trailingIcon ?? Image(systemName: "chevron.right"))
+                        (trailingIcon ?? Image("chevron-right", bundle: .module))
                             .renderingMode(.template)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: chevronSize, height: chevronSize)
-                            .foregroundStyle(ADIBColors.Text.base)
+                            .foregroundStyle(ADIBColors.Text.subdued)
                     }
 
                     // Bank info row
