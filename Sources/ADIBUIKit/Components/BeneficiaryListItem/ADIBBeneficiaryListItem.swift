@@ -118,7 +118,7 @@ public struct ADIBBeneficiaryListItem: View {
                         // More button
                         if let onMoreTap {
                             Button(action: onMoreTap) {
-                                Image(systemName: "ellipsis")
+                                Image("more-horizontal", bundle: .module)
                                     .renderingMode(.template)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
