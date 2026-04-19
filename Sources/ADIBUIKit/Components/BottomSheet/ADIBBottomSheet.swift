@@ -74,6 +74,8 @@ public struct ADIBBottomSheet<Illustration: View, Content: View, Actions: View>:
         self.actions = actions()
     }
 
+    @State private var sheetHeight: CGFloat = 0
+
     // MARK: - Body
 
     public var body: some View {
@@ -134,10 +136,21 @@ public struct ADIBBottomSheet<Illustration: View, Content: View, Actions: View>:
                 .padding(.top, sectionGap)
             }
             .padding(.top, topPadding)
+            .padding(.bottom, sectionGap)
+            .background(
+                GeometryReader { geo in
+                    Color.clear.preference(
+                        key: SheetHeightKey.self,
+                        value: geo.size.height
+                    )
+                }
+            )
         }
+        .scrollDisabled(true)
         .frame(maxWidth: .infinity)
         .background(Color.white)
-        .presentationDetents([.large])
+        .onPreferenceChange(SheetHeightKey.self) { sheetHeight = $0 }
+        .presentationDetents([.height(sheetHeight)])
         .presentationDragIndicator(.hidden)
     }
 }
@@ -240,6 +253,15 @@ public struct ADIBDetailCardRow: View {
             Text(value)
                 .adibTextStyle(ADIBTypography.body.semibold, color: ADIBColors.Text.base)
         }
+    }
+}
+
+// MARK: - Sheet Height Preference Key
+
+private struct SheetHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
     }
 }
 
