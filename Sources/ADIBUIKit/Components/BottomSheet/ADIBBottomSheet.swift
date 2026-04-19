@@ -23,13 +23,13 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public struct ADIBBottomSheet<Content: View, Actions: View>: View {
+public struct ADIBBottomSheet<Illustration: View, Content: View, Actions: View>: View {
 
     // MARK: - Properties
 
     private let heading: String
     private let description: String?
-    private let illustration: Image?
+    private let illustration: Illustration
     private let showCloseButton: Bool
     private let onClose: (() -> Void)?
     private let content: Content
@@ -39,13 +39,11 @@ public struct ADIBBottomSheet<Content: View, Actions: View>: View {
 
     private let sheetRadius: CGFloat = 30
     private let topPadding: CGFloat = 20
-    private let horizontalPadding: CGFloat = ADIBSizes.Spacing.medium     // 16 → will use 20 for content
     private let contentHorizontalPadding: CGFloat = 20
     private let sectionGap: CGFloat = ADIBSizes.Spacing.large             // 24
     private let innerGap: CGFloat = ADIBSizes.Spacing.medium              // 16
     private let headingDescGap: CGFloat = ADIBSizes.Spacing.small         // 8
     private let closeIconSize: CGFloat = ADIBSizes.Spacing.large          // 24
-    private let illustrationHeight: CGFloat = 158
 
     // MARK: - Init
 
@@ -53,25 +51,25 @@ public struct ADIBBottomSheet<Content: View, Actions: View>: View {
     /// - Parameters:
     ///   - heading: The main heading text (centered).
     ///   - description: Optional description text below the heading (centered).
-    ///   - illustration: Optional illustration image shown above the heading.
     ///   - showCloseButton: Whether to show the close (X) button (default `true`).
     ///   - onClose: Action when the close button is tapped.
+    ///   - illustration: Custom illustration view shown above the heading.
     ///   - content: Custom content view placed between the description and the actions.
     ///   - actions: Action buttons at the bottom (e.g. PrimaryButton, TertiaryButton).
     public init(
         heading: String,
         description: String? = nil,
-        illustration: Image? = nil,
         showCloseButton: Bool = true,
         onClose: (() -> Void)? = nil,
+        @ViewBuilder illustration: () -> Illustration,
         @ViewBuilder content: () -> Content,
         @ViewBuilder actions: () -> Actions
     ) {
         self.heading = heading
         self.description = description
-        self.illustration = illustration
         self.showCloseButton = showCloseButton
         self.onClose = onClose
+        self.illustration = illustration()
         self.content = content()
         self.actions = actions()
     }
@@ -79,67 +77,64 @@ public struct ADIBBottomSheet<Content: View, Actions: View>: View {
     // MARK: - Body
 
     public var body: some View {
-        VStack(spacing: 0) {
-            // Close button row
-            if showCloseButton {
-                HStack {
-                    Spacer()
-                    Button {
-                        onClose?()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .renderingMode(.template)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: closeIconSize, height: closeIconSize)
-                            .foregroundStyle(ADIBColors.Text.base)
-                            .contentShape(Rectangle())
+        ScrollView {
+            VStack(spacing: 0) {
+                // Close button row
+                if showCloseButton {
+                    HStack {
+                        Spacer()
+                        Button {
+                            onClose?()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .renderingMode(.template)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: closeIconSize, height: closeIconSize)
+                                .foregroundStyle(ADIBColors.Text.base)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
+                    .padding(.horizontal, contentHorizontalPadding)
                 }
-                .padding(.horizontal, contentHorizontalPadding)
-            }
 
-            // Illustration
-            if let illustration {
+                // Illustration
                 illustration
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: illustrationHeight)
                     .frame(maxWidth: .infinity)
                     .clipped()
                     .padding(.top, ADIBSizes.Spacing.small)
-            }
 
-            // Heading + description + content
-            VStack(spacing: innerGap) {
-                VStack(spacing: headingDescGap) {
-                    Text(heading)
-                        .adibTextStyle(ADIBTypography.h1.semibold, color: ADIBColors.Text.base)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-
-                    if let description, !description.isEmpty {
-                        Text(description)
-                            .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.subdued)
+                // Heading + description + content
+                VStack(spacing: innerGap) {
+                    VStack(spacing: headingDescGap) {
+                        Text(heading)
+                            .adibTextStyle(ADIBTypography.h1.semibold, color: ADIBColors.Text.base)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
+
+                        if let description, !description.isEmpty {
+                            Text(description)
+                                .adibTextStyle(ADIBTypography.body.regular, color: ADIBColors.Text.subdued)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+                        }
                     }
+
+                    content
                 }
+                .padding(.horizontal, contentHorizontalPadding)
+                .padding(.top, innerGap)
 
-                content
+                // Action buttons
+                VStack(spacing: 0) {
+                    actions
+                }
+                .padding(.horizontal, contentHorizontalPadding)
+                .padding(.top, sectionGap)
             }
-            .padding(.horizontal, contentHorizontalPadding)
-            .padding(.top, innerGap)
-
-            // Action buttons
-            VStack(spacing: 0) {
-                actions
-            }
-            .padding(.horizontal, contentHorizontalPadding)
-            .padding(.top, sectionGap)
+            .padding(.top, topPadding)
         }
-        .padding(.top, topPadding)
         .frame(maxWidth: .infinity)
         .background(Color.white)
         .presentationDetents([.medium, .large])
@@ -149,21 +144,40 @@ public struct ADIBBottomSheet<Content: View, Actions: View>: View {
 
 // MARK: - Convenience Init (No Content)
 
-extension ADIBBottomSheet where Content == EmptyView {
-    /// Creates a bottom sheet without custom content.
+extension ADIBBottomSheet where Illustration == EmptyView {
+    /// Creates a bottom sheet without an illustration.
     public init(
         heading: String,
         description: String? = nil,
-        illustration: Image? = nil,
+        showCloseButton: Bool = true,
+        onClose: (() -> Void)? = nil,
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder actions: () -> Actions
+    ) {
+        self.heading = heading
+        self.description = description
+        self.showCloseButton = showCloseButton
+        self.onClose = onClose
+        self.illustration = EmptyView()
+        self.content = content()
+        self.actions = actions()
+    }
+}
+
+extension ADIBBottomSheet where Illustration == EmptyView, Content == EmptyView {
+    /// Creates a bottom sheet without illustration or custom content.
+    public init(
+        heading: String,
+        description: String? = nil,
         showCloseButton: Bool = true,
         onClose: (() -> Void)? = nil,
         @ViewBuilder actions: () -> Actions
     ) {
         self.heading = heading
         self.description = description
-        self.illustration = illustration
         self.showCloseButton = showCloseButton
         self.onClose = onClose
+        self.illustration = EmptyView()
         self.content = EmptyView()
         self.actions = actions()
     }
@@ -238,9 +252,14 @@ public struct ADIBDetailCardRow: View {
             ADIBBottomSheet(
                 heading: "Check the name",
                 description: "Is the beneficiary name as expected?",
-                illustration: Image(systemName: "exclamationmark.triangle.fill"),
                 onClose: {}
             ) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80, height: 80)
+                    .foregroundStyle(.orange)
+            } content: {
                 ADIBDetailCard {
                     ADIBDetailCardRow(
                         label: "Actual beneficiary name",
