@@ -79,13 +79,40 @@ public struct ADIBBottomSheet<Content: View, Actions: View>: View {
     // MARK: - Body
 
     public var body: some View {
-        VStack(spacing: sectionGap) {
-            // Top area: illustration + close button
-            topSection
+        VStack(spacing: 0) {
+            // Close button row
+            if showCloseButton {
+                HStack {
+                    Spacer()
+                    Button {
+                        onClose?()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .renderingMode(.template)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: closeIconSize, height: closeIconSize)
+                            .foregroundStyle(ADIBColors.Text.base)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal, contentHorizontalPadding)
+            }
+
+            // Illustration
+            if let illustration {
+                illustration
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: illustrationHeight)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+                    .padding(.top, ADIBSizes.Spacing.small)
+            }
 
             // Heading + description + content
             VStack(spacing: innerGap) {
-                // Heading & description
                 VStack(spacing: headingDescGap) {
                     Text(heading)
                         .adibTextStyle(ADIBTypography.h1.semibold, color: ADIBColors.Text.base)
@@ -100,55 +127,23 @@ public struct ADIBBottomSheet<Content: View, Actions: View>: View {
                     }
                 }
 
-                // Custom content
                 content
             }
             .padding(.horizontal, contentHorizontalPadding)
+            .padding(.top, innerGap)
 
             // Action buttons
             VStack(spacing: 0) {
                 actions
             }
             .padding(.horizontal, contentHorizontalPadding)
+            .padding(.top, sectionGap)
         }
         .padding(.top, topPadding)
         .frame(maxWidth: .infinity)
         .background(Color.white)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.hidden)
-    }
-
-    // MARK: - Top Section
-
-    @ViewBuilder
-    private var topSection: some View {
-        ZStack(alignment: .topTrailing) {
-            // Illustration
-            if let illustration {
-                illustration
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: illustrationHeight)
-                    .frame(maxWidth: .infinity)
-            }
-
-            // Close button
-            if showCloseButton {
-                Button {
-                    onClose?()
-                } label: {
-                    Image(systemName: "xmark")
-                        .renderingMode(.template)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: closeIconSize, height: closeIconSize)
-                        .foregroundStyle(ADIBColors.Text.base)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .padding(.trailing, contentHorizontalPadding)
-            }
-        }
     }
 }
 
