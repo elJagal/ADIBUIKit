@@ -86,7 +86,7 @@ public struct ADIBBottomSheet<Illustration: View, Content: View, Actions: View>:
                         Button {
                             onClose?()
                         } label: {
-                            Image(systemName: "xmark")
+                            Image("x", bundle: .module)
                                 .renderingMode(.template)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -137,7 +137,7 @@ public struct ADIBBottomSheet<Illustration: View, Content: View, Actions: View>:
         }
         .frame(maxWidth: .infinity)
         .background(Color.white)
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.large])
         .presentationDragIndicator(.hidden)
     }
 }
