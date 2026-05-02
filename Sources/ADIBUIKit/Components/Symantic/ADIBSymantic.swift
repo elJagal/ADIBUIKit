@@ -95,7 +95,7 @@ public struct ADIBSymantic<Actions: View>: View {
 
             // Illustration + heading + description
             VStack(spacing: illustrationHeadingGap) {
-                Illustration(type: type)
+                ADIBSymanticIllustration(type: type)
 
                 VStack(spacing: headingDescriptionGap) {
                     Text(heading)
@@ -127,42 +127,30 @@ public struct ADIBSymantic<Actions: View>: View {
 
 // MARK: - Illustration-Only Variant
 
-extension ADIBSymantic {
-    /// Just the illustration block (no heading / actions).
-    /// Useful inside containers like `ADIBBottomSheet` where the sheet
-    /// already provides the heading + description + actions.
-    public struct Illustration: View {
-        private let type: ADIBSymanticType
-        private let size: CGFloat
+/// Just the illustration block (no heading / actions).
+/// Useful inside containers like `ADIBBottomSheet` where the sheet
+/// already provides the heading + description + actions.
+public struct ADIBSymanticIllustration: View {
 
-        public init(type: ADIBSymanticType, size: CGFloat? = nil) {
-            self.type = type
-            // Default sizes match the Figma source artwork
-            self.size = size ?? (type == .warning ? 156 : 238)
-        }
+    private let type: ADIBSymanticType
+    private let size: CGFloat
 
-        public var body: some View {
-            Image(type.illustrationName, bundle: .module)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: size, height: size)
+    public init(type: ADIBSymanticType, size: CGFloat? = nil) {
+        self.type = type
+        // Default sizes match the Figma source artwork
+        switch type {
+        case .warning:
+            self.size = size ?? 156
+        case .success, .transferSuccess:
+            self.size = size ?? 238
         }
     }
-}
 
-// MARK: - Convenience Init (No Actions)
-
-extension ADIBSymantic where Actions == EmptyView {
-    /// Creates a status template with no action buttons (illustration + text only).
-    public init(
-        type: ADIBSymanticType,
-        heading: String,
-        description: String? = nil
-    ) {
-        self.type = type
-        self.heading = heading
-        self.description = description
-        self.actions = EmptyView()
+    public var body: some View {
+        Image(type.illustrationName, bundle: .module)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: size, height: size)
     }
 }
 
@@ -191,7 +179,7 @@ extension ADIBSymantic where Actions == EmptyView {
 }
 
 #Preview("Symantic — Warning (illustration only)") {
-    ADIBSymantic<EmptyView>.Illustration(type: .warning)
+    ADIBSymanticIllustration(type: .warning)
         .padding()
         .background(ADIBColors.background)
 }
